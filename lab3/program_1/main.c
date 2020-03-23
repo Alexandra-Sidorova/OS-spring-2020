@@ -3,47 +3,47 @@
 
 void main()
 {
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
 
-	// Запустим дочерний процесс.
-	if (!CreateProcess( NULL, // модуль.
-		(LPSTR)"notepad.exe", // Командная строка не используется.
-		NULL,                 // Дескриптор процесса не наследуемый.
-		NULL,                 // Дескриптор потока не наследуемый.
-		FALSE,                // Установим наследование дескриптора в FALSE.
-		0,                    // Флажков создания нет.
-		NULL,                 // Используйте блок конфигурации родителя.
-		NULL,                 // Используйте стартовый каталог родителя.
-		&si,                  // Указатель на структуру STARTUPINFO.
-		&pi)                 // Указатель на структуру PROCESS_INFORMATION.
-		)
-	{
-		printf("[ERROR] Process wasn't created!");
-		return;
-	}
-	
+    // Р—Р°РїСѓСЃС‚РёРј РґРѕС‡РµСЂРЅРёР№ РїСЂРѕС†РµСЃСЃ.
+    if (!CreateProcess( NULL, // РјРѕРґСѓР»СЊ.
+        (LPSTR)"notepad.exe", // РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР° РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ.
+        NULL,                 // Р”РµСЃРєСЂРёРїС‚РѕСЂ РїСЂРѕС†РµСЃСЃР° РЅРµ РЅР°СЃР»РµРґСѓРµРјС‹Р№.
+        NULL,                 // Р”РµСЃРєСЂРёРїС‚РѕСЂ РїРѕС‚РѕРєР° РЅРµ РЅР°СЃР»РµРґСѓРµРјС‹Р№.
+        FALSE,                // РЈСЃС‚Р°РЅРѕРІРёРј РЅР°СЃР»РµРґРѕРІР°РЅРёРµ РґРµСЃРєСЂРёРїС‚РѕСЂР° РІ FALSE.
+        0,                    // Р¤Р»Р°Р¶РєРѕРІ СЃРѕР·РґР°РЅРёСЏ РЅРµС‚.
+        NULL,                 // РСЃРїРѕР»СЊР·СѓР№С‚Рµ Р±Р»РѕРє РєРѕРЅС„РёРіСѓСЂР°С†РёРё СЂРѕРґРёС‚РµР»СЏ.
+        NULL,                 // РСЃРїРѕР»СЊР·СѓР№С‚Рµ СЃС‚Р°СЂС‚РѕРІС‹Р№ РєР°С‚Р°Р»РѕРі СЂРѕРґРёС‚РµР»СЏ.
+        &si,                  // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ STARTUPINFO.
+        &pi)                 // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ PROCESS_INFORMATION.
+        )
+    {
+        printf("[ERROR] Process wasn't created!");
+        return;
+    }
+    
 
-	// Ждать до тех пор, пока дочерний процесс не выйдет из работы.
-	if (WaitForSingleObject(pi.hProcess, INFINITE) == WAIT_FAILED)
-	{
-		printf("[ERROR] Wait failed!");
-		return;
-	}
+    // Р–РґР°С‚СЊ РґРѕ С‚РµС… РїРѕСЂ, РїРѕРєР° РґРѕС‡РµСЂРЅРёР№ РїСЂРѕС†РµСЃСЃ РЅРµ РІС‹Р№РґРµС‚ РёР· СЂР°Р±РѕС‚С‹.
+    if (WaitForSingleObject(pi.hProcess, INFINITE) == WAIT_FAILED)
+    {
+        printf("[ERROR] Wait failed!");
+        return;
+    }
 
-	// Закроем дескрипторы процесса и потока.
-	if (!CloseHandle(pi.hProcess))
-	{
-		printf("[ERROR] Closing process failed!");
-		return;
-	}
-	
-	if( !CloseHandle(pi.hThread))
-	{
-		printf("[ERROR] Closing thread failed!");
-		return;
-	}
+    // Р—Р°РєСЂРѕРµРј РґРµСЃРєСЂРёРїС‚РѕСЂС‹ РїСЂРѕС†РµСЃСЃР° Рё РїРѕС‚РѕРєР°.
+    if (!CloseHandle(pi.hProcess))
+    {
+        printf("[ERROR] Closing process failed!");
+        return;
+    }
+    
+    if( !CloseHandle(pi.hThread))
+    {
+        printf("[ERROR] Closing thread failed!");
+        return;
+    }
 }
