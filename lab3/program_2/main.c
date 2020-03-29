@@ -16,7 +16,7 @@ DWORD WINAPI ThreadProcSub(LPVOID* lpParam)
 {
     unsigned int i;
     for (i = 0; i < 100000000; i++)
-        ((volatile long)lpParam)--;
+        ((volatile long)*lpParam)--;
 
     ExitThread(0);
 };
