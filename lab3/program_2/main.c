@@ -23,7 +23,7 @@ DWORD WINAPI ThreadProcSub(LPVOID* lpParam)
 
 void main()
 {
-    volatile long variable = 20;
+	volatile long variable = 20;
     HANDLE  hThreadArray[20];
     int i;
     time_t start, end;
