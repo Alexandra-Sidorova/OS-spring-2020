@@ -16,14 +16,14 @@ DWORD WINAPI ThreadProcSub(LPVOID* lpParam)
 {
     unsigned int i;
     for (i = 0; i < 100000000; i++)
-        ((volatile long)*lpParam)--;
+        ((volatile long)lpParam)--;
 
     ExitThread(0);
 };
 
 void main()
 {
-    volatile long variable = 20;
+	volatile long variable = 20;
     HANDLE  hThreadArray[20];
     int i;
     time_t start, end;
