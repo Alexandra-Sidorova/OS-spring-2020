@@ -1,0 +1,789 @@
+
+<!-- saved from url=(0044)https://www.opennet.ru/docs/RUS/zlp/004.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=KOI8-R">
+
+
+<title>
+Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ
+</title></head>
+<body bgcolor="#DDE1C2">
+<link rel="stylesheet" href="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/opennet4.css" type="text/css">
+<!--htdig_noindex-->
+<form method="get" action="https://www.opennet.ru/search.shtml">
+<aside>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tbody><tr>
+<td valign="BOTTOM" bgcolor="#E9EAD6" style="background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left">
+<a href="https://www.opennet.ru/"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/opennet2.gif" height="60" width="249" alt="The OpenNET Project" border="0"></a><br>
+</td>
+
+<td bgcolor="#B0B190" width="1"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="1" width="1" alt=""></td>
+
+<td valign="TOP" align="RIGHT" width="728" height="90" bgcolor="#D9DAC6">
+<table border="0" cellpadding="0" width="728">
+<tbody><tr>
+<td height="90" bgcolor="#D9DAC6">
+<p></p>
+
+</td>
+</tr>
+</tbody></table>
+</td>
+
+<td bgcolor="#B0B190" width="1"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="1" width="1" alt=""></td>
+<td width="40" bgcolor="#E9EAD6" style="background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left">&nbsp;</td>
+<td bgcolor="#B0B190" width="1"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="1" width="1" alt=""></td>
+
+<td valign="TOP" align="RIGHT" width="0" bgcolor="#E9EAD6" rowspan="3">
+</td>
+
+</tr>
+
+<tr bgcolor="#B0B190"><td colspan="6"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="1" width="1" alt=""></td></tr>
+
+
+<tr bgcolor="#E9EAD6">
+<td align="CENTER" colspan="5">
+<table width="100%">
+<tbody><tr>
+<td rowspan="2" width="300" nowrap="" class="h">
+<input type="hidden" name="exclude" value="index|/man.shtml"><a href="https://www.opennet.ru/search.shtml" class="h"><u>Поиск</u></a>&nbsp;(<a href="https://www.opennet.ru/keywords/" class="h">теги</a>):&nbsp;<input type="text" size="20" name="words" value="" title="для поиска в google наберите &quot;g фраза&quot;">
+</td><td width="18%">
+&nbsp;   <a href="https://www.opennet.ru/opennews/" class="h"><b><u>НОВОСТИ</u></b></a> (<a href="https://www.opennet.ru/news/opennet.shtml" class="h">+</a>)
+</td><td width="18%">
+  <a href="https://www.opennet.ru/mp/" class="h"><b><u>КОНТЕНТ</u></b></a>
+</td><td width="16%">
+  <a href="http://wiki.opennet.ru/" class="h"><b><u>WIKI</u></b></a>
+</td><td width="16%">
+   <a href="https://www.opennet.ru/man.shtml" class="h"><b><u>MAN'ы</u></b></a>
+</td><td width="16%">
+   <a href="https://www.opennet.ru/forum/" class="h"><b><u>ФОРУМ</u></b></a>
+</td><td width="16%" align="right">
+   <a href="https://twitter.com/opennetru"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/twitter.png" height="16" width="16" alt="twitter" title="Twitter" border="0"></a>&nbsp;<a href="https://vk.com/opennet"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/vkontakte.gif" height="16" width="16" title="ВКонтакте" border="0"></a>&nbsp;<a href="https://t.me/opennet_ru"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/telegram2.png" height="16" width="16" title="Telegram" border="0"></a>&nbsp;<a href="https://zen.yandex.ru/opennet"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/zen.gif" height="16" width="16" title="Yandex Zen" border="0"></a>&nbsp;<a href="https://www.facebook.com/OpenNet.News/"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/facebook.gif" height="16" width="16" title="Facebook" border="0"></a>
+</td></tr>
+</tbody></table>
+</td>
+<td bgcolor="#B0B190" width="1"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="1" width="1" alt=""></td>
+</tr>
+<tr bgcolor="#B0B190"><td colspan="7"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="2" width="1" alt=""></td></tr>
+</tbody></table>
+</aside>
+<style>
+    .hdr_mobile {
+	text-align: center; 
+	display: none;
+	margin: 0px;
+	padding: 0px;
+    }
+</style>
+<div class="hdr_mobile">
+<div style="margin-left: auto; margin-right: auto; width: 100%; height: 70px; border:1px solid #b0b190; min-width: 360px; max-width: 600px; background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left;">
+<div style="float:left; width: 249px; height: 60px; margin-top: 10px;">
+<a href="https://www.opennet.ru/"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/opennet2_lite.gif" style="height: 60px; width: 249px; border: 1px;" alt="The OpenNET Project / Index page"></a>
+</div>
+<div style="float: left; text-align: center; height: 70px; width: 331px; padding: 5px; margin-left: 10px;">
+<br><small>[ <a href="https://www.opennet.ru/opennews/">новости</a>/<a href="https://www.opennet.ru/opennews/?full_lines=15&amp;lines=15&amp;mid_lines=00">++</a> | <a href="https://www.opennet.ru/forum/">форум</a> | <a href="http://wiki.opennet.ru/">wiki</a> | <a href="https://www.opennet.ru/keywords/">теги</a>
+]</small>
+<a href="https://t.me/opennet_ru"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/telegram2.png" height="16" width="16" title="Telegram" border="0"></a>
+</div>
+</div>
+</div>
+<div style="clear: both;"></div>
+
+
+<div style="float: left; width: 279; text-align: left;padding-right: 60px;" id="adv">
+</div>
+<div style="padding-top: 0px;position:absolute;left:50%;margin-left:-235px;width:470px;" id="adv2">
+</div>
+<div style="width: 279;float: right;" id="adv3">
+</div>
+<div style="clear: both;"></div>
+<br>
+</form>
+<!--/htdig_noindex-->
+
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin-bottom: 5px;margin-top: 5px;">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="4" bgcolor="#E9EAD6" width="100%">
+<tbody><tr bgcolor="#C7CBB1"><td><font color="#000090">
+<b><a href="https://www.opennet.ru/docs/">Каталог документации</a> / 
+<a href="https://www.opennet.ru/docs/124.shtml">Раздел "Программирование, языки"</a> /
+<a href="https://www.opennet.ru/docs/RUS/zlp/">Оглавление документа</a>
+</b>
+</font></td></tr>
+</tbody></table>
+</td></tr>
+<tr bgcolor="#B0B190"><td><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/p.gif" height="3" width="1" alt=""></td></tr>
+</tbody></table>
+
+<a href="https://www.opennet.ru/docs/RUS/zlp/index.html">Оглавление</a>
+<hr noshade="">
+<h2>Глава 4. ОКРУЖЕНИЕ</h2>
+
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#1">4.1. Введение в окружение</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#2">4.2. Массив environ</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#3">4.3. Чтение окружения: getenv()</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#4">4.4. Запись окружения: setenv()</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#5">4.5. Сырая модификация окружения: putenv()</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#6">4.6. Удаление переменной окружения: unsetenv()</a><br>
+<a href="https://www.opennet.ru/docs/RUS/zlp/004.html#7">4.7. Очистка окружения: clearenv()</a><br>
+
+<a name="1"><h3>4.1. Введение в окружение</h3></a>
+<p align="justify">
+Окружение (environment) или среда - это набор пар ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ,
+доступный каждому пользовательскому процессу. Иными словами, окружение - это
+набор переменных окружения. Если вы используете оболочку, отличную от bash, то
+не все примеры этой главы могут быть воспроизведены.
+</p>
+
+<p align="justify">
+Для того, чтобы посмотреть окружение, просто введите команду env без аргументов.
+В зависимости от конфигурации системы, вывод env может занять несколько
+экранов, поэтому лучше сделать так:
+
+</p><pre><font color="#ff6644">
+$ env &gt; myenv
+$
+</font>
+</pre>
+
+Или так:
+
+<pre><font color="#ff6644">
+$ env | more
+</font>
+</pre>
+
+Или так:
+
+<pre><font color="#ff6644">
+$ env | less
+$
+</font>
+</pre>
+<p></p>
+
+<p align="justify">
+Переменные окружения могут формироваться как из заглавных, так и из строчных
+символов, однако исторически сложилось именовать их в верхнем регистре. Мы
+также не будем отступать от этого неписанного правила.
+</p>
+
+<p align="justify">
+Про полезность окружения можно говорить долго, но основное его назначение -
+заставить одни и те же программы работать у разных пользователей по-разному.
+Приятно, например, когда программа "угадывает" имя пользователя или домашний
+каталог пользователя. Чаще всего такая информация "добывается" из переменных
+окружения USER и HOME соответственно.
+</p>
+
+<p align="justify">
+Значение каждой переменной окружения изначально представляет собой строковую
+константу (строку). Интерпретация значений переменных полностью возлагается на
+программу. Иными словами, все переменные окружения имеют тип char*, а само
+окружение имеет тип char**. Чтобы вывести на экран значение какой-нибудь
+переменной окружения, достаточно набрать echo $ИМЯ_ПЕРЕМЕННОЙ:
+</p><pre><font color="#ff6644">
+$ echo $USER
+<b>nn</b>
+$ echo $HOME
+<b>/home/nn</b>
+$
+</font>
+</pre>
+
+Вообще говоря, при работе с оболочкой bash, запись $ИМЯ_ПЕРЕМЕННОЙ заменяется
+на само значение переменной, если только эта запись не встречается в кавычках,
+апострофах или в комментариях. В моем случае, например, запись $HOME заменяется
+на /home/nn. То есть команда mkdir $HOME/mynewdir создаст в моем домашнем
+каталоге подкаталог mynewdir.
+<p></p>
+
+<p align="justify">
+В разных системах и у разных пользователей окружение отличается не только
+значениями переменных, но и наличием/отсутствием этих переменных. Пользователи,
+использующие универсальные MUA (Mail User Agent), наподобие Mozilla-mail, Kmail
+или Sylpheed вряд ли будут иметь в своем окружении (по крайней мере с пользой)
+переменные MAIL или MAILDIR. А пользователям mutt, pine или elm (с довесками 
+в виде fetchmail/getmail, procmail и проч.) эти переменные жизненно необходимы.
+Пользователь, не использующий графические оболочки, вряд ли будет иметь в своем
+окружении переменную QTDIR. Ниже приведены те переменные окружения, которые
+есть почти у всех пользователей Linux:
+</p><ul>
+<li><b>USER</b> - имя текущего пользователя</li>
+<li><b>HOME</b> - путь к домашнему каталогу текущего пользователя</li>
+<li><b>PATH</b> - список каталогов, разделенных двоеточиями, в которых
+производится "поиск" программ</li>
+<li><b>PWD</b> - текущий каталог</li>
+<li><b>OLDPWD</b> - предыдущий текущий каталог</li>
+<li><b>TERM</b> - тип терминала</li>
+<li><b>SHELL</b> - текущая командная оболочка</li>
+</ul>
+
+Некоторые переменные окружения имеются не во всех системах, но все-таки требуют
+упоминания:
+
+<ul>
+<li><b>HOSTNAME</b> - имя машины</li>
+<li><b>QTDIR</b> - расположение библиотеки QT</li>
+<li><b>MAIL</b> - почтовый ящик</li>
+<li><b>LD_LIBRARY_PATH</b> - место "поиска" дополнительных библиотек (см.
+предыдущую главу)</li>
+<li><b>MANPATH</b> - место поиска файлов man-страниц (каталоги, разделенные
+двоеточием)</li>
+<li><b>LANG</b> - язык и кодировка пользователя (иногда LANGUAGE)</li>
+<li><b>DISPLAY</b> - текущий дисплей в X11</li>
+</ul>
+<p></p>
+
+<p align="justify">
+Помимо переменных окружения, командные оболочки, такие как bash располагают
+собственным набором пар ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ. Это переменные оболочки. Набор
+таких переменных называют окружением (или средой) оболочки. Эти переменные
+чем-то напоминают локальные (стековые) переменные в языке C. Они недоступны для
+других программ (в том числе и для env) и используются в основном в сценариях
+оболочки. Чтобы задать переменную оболочки, достаточно написать в командной
+строке ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ.
+
+</p><pre><font color="#ff6644">
+$ MYVAR=Hello
+$ echo $MYVAR
+<b>Hello</b>
+$ env | grep MYVAR
+$
+</font>
+</pre>
+
+Однако, при желании, можно включить локальную переменную оболочки в основное
+окружение. Для этого используется команда export:
+
+<pre><font color="#ff6644">
+$ export MYVAR
+$ env | grep MYVAR
+<b>MYVAR=Hello</b>
+$
+</font>
+</pre>
+
+Можно сделать сразу так:
+
+<pre><font color="#ff6644">
+$ export MYNEWVAR=Goodbye
+$ echo $MYNEWVAR
+<b>Goodbye</b>
+$ env | grep MYNEWVAR
+<b>MYNEWVAR=Goodbye</b>
+$
+</font>
+</pre>
+
+Прежде, чем продолжать дальше, попробуйте поиграться с переменными окружения,
+чтобы лучше все понять. Выясните экспериментальным путем, чувствительны ли к
+регистру символов переменные окружения; можно ли использовать в качестве
+значений переменных окружения строки, содержащие пробелы; если можно, то как?
+<p></p>
+
+<p align="justify">
+Теперь разберемся с тем, откуда берется окружение. Любая запущенная и
+работающая в Linux программа - это процесс. Запуская дважды одну и ту же
+программу, вы получаете два процесса. У каждого процесса (кроме init) есть
+свой процесс-родитель. Когда вы набираете в командной строке vim, в системе
+появляется новый процесс, соотвествующий текстовому редактору vim;
+родительским процессом здесь будет оболочка (bash, например). Для самой
+оболочки новый процесс будет дочерним. Мы будем подробно изучать процессы в
+последующих главах книги. Сейчас же важно одно: <b>новый процесс получает
+копию родительского окружения.</b> Из этого правила существует несколько
+исключений, но мы пока об этом говорить не будем. Важно то, что у кажного
+процесса своя <b>независимая копия</b> окружения, с которой процесс может
+делать все что угодно. Если процесс завершается, то копия теряется; если
+процесс породил другой, дочерний процесс, то этот новый процесс получает копию
+окружения своего родителя. Мы еще неоднократно столкнемся с окружением при
+изучении многозадачности.
+</p>
+
+<a name="2"><h3>4.2. Массив environ</h3></a>
+<p align="justify">
+Теперь, когда мы разобрались, что такое окружение, самое время написать
+программу для взаимодействия с окружением. Чтобы показать, как это все
+работает, сначала изобретем велосипед.
+</p>
+
+<p align="justify">
+В заголовочном файле unistd.h объявлен внешний двумерный массив environ:
+
+</p><pre><font color="#4466ff"><b>
+extern char ** environ;
+</b></font>
+</pre>
+
+В этом массиве хранится копия окружения процесса. Точка.
+<p></p>
+
+<p align="justify">
+Массив не константный, но я не рекомендую вам изменять его - это опасно (для
+программы) и является плохим стилем программирования. Для изменения environ есть
+специальные механизмы, которые мы рассмотрим чуть позже. Уверен, что настоящие
+будущие хакеры прочитают это и сделают с точностью до "наоборот".
+</p>
+
+<p align="justify">
+А читать environ нам никто не запрещал. Напишем одноименную программу
+(environ), которой в качестве аргумента передается имя переменной. Программа
+будет проверять, существует ли эта переменная в окружении; и если существует, то
+каково ее значение. Как мы позже узнаем, это можно было бы сделать значительно
+проще. Но я предупредил: мы изобретаем велосипед. Вот эта программа:
+
+</p><pre><font color="#4466ff"><b>
+/* environ.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+
+extern char ** environ;	/* Environment itself */
+
+int main (int argc, char ** argv)
+{
+	int i;
+	if (argc &lt; 2)
+	{
+		fprintf (stderr, "environ: Too few arguments\n");
+		fprintf (stderr, "Usage: environ &lt;variable&gt;\n");
+		exit (1);
+	}
+	
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		if (!strncmp (environ[i], argv[1], strlen (argv[1])))
+		{
+			printf ("'%s' found\n", environ[i]);
+			exit (0);
+		}	
+	}
+	printf ("'%s' not found\n", argv[1]);
+	exit (0);
+}
+</b></font>
+</pre>
+
+А вот Makefile для этой программы (если нужен):
+
+<pre><font color="#4466ff"><b>
+# Makefile for environ
+
+environ: environ.c
+	gcc -o environ environ.c
+
+clean:
+	rm -f environ
+</b></font>
+</pre>
+
+Проверяем:
+
+<pre><font color="#ff6644">
+$ make
+<b>gcc -o environ environ.c</b>
+$ ./environ
+<b>environ: Too few arguments
+Usage: environ &lt;variable&gt;</b>
+$ ./environ USER
+<b>'USER=nn' found</b>
+$ ./environ ABRAKADABRA
+<b>'ABRAKADABRA' not found</b>
+$
+</font>
+</pre>
+<p></p>
+
+<p align="justify">
+В приведенном примере мы осуществили простой синтаксический анализ массива
+environ, так как переменные и значения представлены в нем в обычном виде
+(ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ). К счастью нам больше не придется осуществлять
+синтаксический разбор массива environ. О настоящем предназначении этого массива
+будет рассказано в главе, посвященной многозадачности.
+</p>
+
+<a name="3"><h3>4.3. Чтение окружения: getenv()</h3></a>
+<p align="justify">
+В заголовочном файле stdlib.h объявлена функция getenv , которая доказывает, 
+что в предыдущем примере мы изобрели велосипед. Ниже приведен адаптированный
+прототип этой функции.
+
+</p><pre><font color="#4466ff"><b>
+char * getenv (const char * name);
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Функция эта работает очень просто: если в качестве аргумента указано имя
+существующей переменной окружения, то функция возвращает указатель на строку,
+содержащую значение этой переменной; если переменная отсутствует, возвращается
+NULL.
+</p>
+
+<p align="justify">
+Как видим, функция getenv() позволяет не осуществлять синтаксический разбор
+environ. Напишем новую программу, которая делает то же, что и предыдущая,
+только более простым способом. Назовем ее getenv по имени функции - виновника
+торжества.
+
+</p><pre><font color="#4466ff"><b>
+/* getenv.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main (int argc, char ** argv)
+{
+	if (argc &lt; 2)
+	{
+		fprintf (stderr, "getenv: Too few arguments\n");
+		fprintf (stderr, "Usage: getenv &lt;variable&gt;\n");
+		exit (1);
+	}
+	char * var = getenv (argv[1]);
+	if (var == NULL)
+	{
+		printf ("'%s' not found\n", argv[1]);
+		exit (0);
+	}
+	printf ("'%s=%s' found\n", argv[1], var);
+	exit (0);
+}
+</b></font>
+</pre>
+<p></p>
+
+<a name="4"><h3>4.4. Запись окружения: setenv()</h3></a>
+<p align="justify">
+Пришла пора модифицировать окружение! Еще раз напоминаю: каждый процесс
+получает не доступ к окружению, а <b>копию</b> окружения родительского процесса
+(в нашем случае это командная оболочка). Чтобы добавить в окружение новую
+переменную или изменить существующую, используется функция setenv, объявленная
+в файле stdlib.h. Ниже приведен адаптированный прототип этой функции.
+
+</p><pre><font color="#4466ff"><b>
+int setenv (const char * name, const char * value, int overwrite);
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Если хотите узнать, что значит "адаптированный прототип", загляните в
+/usr/include/stdlib.h на объявления функций getenv() и setenv() и больше не
+спрашивайте ;-)
+</p>
+
+<p align="justify">
+Функция setenv() устанавливает значение (второй аргумент, value) для переменной
+окружения (первый аргумент, name). Третий аргумент - это флаг перезаписи. При
+ненулевом флаге уже существующая переменная перезаписывается, при нулевом флаге
+переменная, если уже существует, - не перезаписывается. В случае успешного
+завершения setenv() возвращает нуль (даже если существующая переменная не
+перезаписалась при overwrite==0). Если в окружении нет места для новой
+переменной, то setenv() возвращает -1.
+</p>
+
+<p align="justify">
+Наша новая программа setenv читает из командной строки два аргумента: имя
+переменной и значение этой переменной. Если переменная не может быть
+установлена, выводится ошибка, если ошибки не произошло, выводится результат в
+формате ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ. Вот эта программа:
+
+</p><pre><font color="#4466ff"><b>
+/* setenv.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define FL_OVWR		0	/* Overwrite flag. You may change it. */
+
+int main (int argc, char ** argv)
+{	
+	if (argc &lt; 3)
+	{
+		fprintf (stderr, "setenv: Too few arguments\n");
+		fprintf (stderr, 
+			"Usage: setenv &lt;variable&gt; &lt;value&gt;\n");
+		exit (1);
+	}
+	if (setenv (argv[1], argv[2], FL_OVWR) != 0)
+	{
+		fprintf (stderr, "setenv: Cannot set '%s'\n", argv[1]);
+	       	exit (1);
+	}
+
+	printf ("%s=%s\n", argv[1], getenv (argv[1]));	
+	exit (0);
+}
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Изменяя константу FL_OVWR можно несколько изменить поведение программы по
+отношению к существующим переменным окружения. Еще раз напоминаю: у каждого
+процесса своя копия окружения, которая уничтожается при завершении процесса.
+Экспериментируйте!
+</p>
+
+<a name="5"><h3>4.5. Сырая модификация окружения: putenv()</h3></a>
+<p align="justify">
+Функция putenv(), объявленная в заголовочном файле stdlib.h вызывается с
+единственным аргументом - строкой формата ПЕРЕМЕННАЯ=ЗНАЧЕНИЕ или просто
+ПЕРЕМЕННАЯ. Обычно такие преформатированные строки называют запросами. Если
+переменная отсутствует, то в окружение добавляется новая запись. Если переменная
+уже существует, то текущее значение перезаписывается. Если в качестве аргумента
+фигурирует просто имя переменной, то переменная удаляется из окружения. В случае
+удачного завершения, putenv() возвращает нуль и -1 - в случае ошибки.
+</p>
+
+<p align="justify">
+У функции putenv() есть одна особенность: указатель на строку, переданный в
+качестве аргумента, становится частью окружения. Если в дальнейшем строка будет
+изменена, будет изменено и окружение. Это очень важный момент, о котором не
+следует забывать. Ниже приведен адаптированный прототип функции putenv:
+</p><pre><font color="#4466ff"><b>
+int putenv (char * str);
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Теперь напишем программу, использующую putenv(). Вот она:
+</p><pre><font color="#4466ff"><b>
+/* putenv.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define QUERY_MAX_SIZE		32
+char * query_str;
+
+void print_evar (const char * var)
+{
+	char * tmp = getenv (var);
+	if (tmp == NULL)
+	{
+		printf ("%s is not set\n", var);
+		return;
+	}
+	printf ("%s=%s\n", var, tmp);
+}
+
+int main (void)
+{
+	int ret;
+	query_str = (char *) calloc (QUERY_MAX_SIZE, sizeof(char));
+	if (query_str == NULL) abort ();
+
+	strncpy (query_str, "FOO=foo_value1", QUERY_MAX_SIZE-1);
+	ret = putenv (query_str);
+	if (ret != 0) abort ();
+	print_evar ("FOO");
+
+	strncpy (query_str, "FOO=foo_value2", QUERY_MAX_SIZE-1);
+	print_evar ("FOO");
+
+	strncpy (query_str, "FOO", QUERY_MAX_SIZE-1);
+	ret = putenv (query_str);
+	if (ret != 0) abort ();
+	print_evar ("FOO");
+	
+	free (query_str);
+	exit (0);
+}
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Программа немного сложнее тех, что приводились ранее, поэтому разберем все по
+порядку. Сначала создаем для удобства функцию print_evar (PRINT Environment
+VARiable), которая будет отражать текущее состояние переменной окружения,
+переданной в качестве аргумента. В функции main() перво-наперво выделяем в куче
+(heap) память для буфера, в который будут помещаться запросы; заносим адрес
+буфера в query_str. Теперь формируем строку, и посылаем запрос в функцию
+putenv(). Здесь нет ничего необычного. Дальше идет демонстрация того, на чем я
+акцентировал внимание: простое изменение содержимого памяти по адресу,
+хранящемуся в query_str приводит к изменению окружения; это видно из вывода
+функции print_evar(). Наконец, вызываем putenv() со строкой, не содержащей
+символа '=' (равно). Это запрос на удаление переменной из окружения. Функция
+print_evar() подтверждает это.
+</p>
+
+<p align="justify">
+Хочу заметить, что putenv() поддерживается не всеми версиями Unix. Если нет
+крайней необходимости, лучше использовать setenv() для пополнения/модификации
+окружения.
+</p>
+
+<a name="6"><h3>4.6. Удаление переменной окружения: unsetenv()</h3></a>
+<p align="justify">
+Функция unsetenv(), объявленная в stdlib.h, удаляет переменную из окружения.
+Ниже приведен адаптированный прототип этой функции.
+</p><pre><font color="#4466ff"><b>
+int unsetenv (const char * name);
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+Прежде всего хочу обратить внимание на то, что раньше функция unsetenv() ничего
+не возращала (void). С выходом версии 2.2.2 библиотеки glibc (январь 2001 года)
+функция стала возвращать int.
+</p>
+
+<p align="justify">
+Функция unsetenv() использует в качестве аргумента имя переменной окружения.
+Возвращаемое значение - нуль при удачном завершении и -1 в случае ошибки.
+Рассмотрим простую программу, которая удаляет переменную окружения USER (!!!).
+Для тех, кто испугался, напоминаю еще один раз: каждый процесс работает с
+собственной копией окружения, никак не связанной с копиями окружения других
+процессов, за исключением дочерних процессов, которых у нас нет. Ниже приведен
+исходный код программы, учитывающий исторические изменения прототипа функции
+unsetenv().
+
+</p><pre><font color="#4466ff"><b>
+/* unsetenv.c */
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;gnu/libc-version.h&gt;
+
+#define OLD_LIBC_VERSION	0
+#define NEW_LIBC_VERSION	1
+#define E_VAR			"USER"
+
+int libc_cur_version (void)
+{
+	int ret = strcmp (gnu_get_libc_version (), "2.2.2");
+	if (ret &lt; 0) return OLD_LIBC_VERSION;
+	return NEW_LIBC_VERSION;
+}
+
+int main (void)
+{
+	int ret;
+	char * str;
+	if (libc_cur_version () == OLD_LIBC_VERSION)
+	{
+		unsetenv (E_VAR);
+	} else
+	{
+		ret = unsetenv (E_VAR);
+		if (ret != 0)
+		{
+			fprintf (stderr, "Cannot unset '%s'\n", E_VAR);
+			exit (1);
+		}
+	}
+
+	str = getenv (E_VAR);
+	if (str == NULL)
+	{
+		printf ("'%s' has removed from environment\n", E_VAR);
+	} else
+	{
+		printf ("'%s' hasn't removed\n", E_VAR);
+	}	
+	exit (0);
+}
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+В программе показан один из самых варварских способов подстроить код под версию
+библиотеки. Это сделано исключительно для демонстрации двух вариантов
+unsetenv(). <b>Никогда не делайте так в реальных программах</b>. Намного проще
+и дешевле (в плане времени), не получая ничего от unsetenv() проверить факт
+удаления переменной при помощи getenv().
+</p>
+
+<a name="7"><h3>4.7. Очистка окружения: clearenv()</h3></a>
+<p align="justify">
+Функция clearenv(), объявленная в заголовочном файле stdlib.h, используется
+крайне редко для полной очистки окружения. clearenv() поддерживается не всеми
+версиями Unix. Ниже приведен ее прототип.
+
+</p><pre><font color="#4466ff"><b>
+int clearenv (void);
+</b></font>
+</pre>
+<p></p>
+
+<p align="justify">
+При успешном завершении clearenv() возвращает нуль. В случае ошибки
+возвращается ненулевое значение.
+</p>
+
+<p align="justify">
+В большинстве случаев вместо clearenv() можно использовать следующую
+инструкцию:
+</p><pre><font color="#4466ff"><b>
+environ = NULL;
+</b></font>
+</pre>
+<p></p>
+<hr noshade="">
+<div align="center">
+<font size="-1" color="#777777">
+Copyright © 2003-2006, 2007 Nikolay N. Ivanov<br>
+Distributed under the GNU Free Documentaton License
+</font>
+</div>
+
+
+<aside>
+<!--htdig_noindex-->
+<noindex>
+<br>
+
+</noindex>
+<!--/htdig_noindex-->
+</aside>
+
+<!-- footer -->
+<!--htdig_noindex-->
+<br>
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#B0B190">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="0" width="100%" valign="MIDDLE">
+<tbody><tr>
+<td width="35%" bgcolor="#E9EAD6" align="LEFT">
+<font size="-1">
+&nbsp;&nbsp;<a href="https://www.opennet.ru/cgi-bin/opennet/bookmark.cgi">Закладки&nbsp;на&nbsp;сайте</a><br>
+&nbsp;&nbsp;<a href="https://www.opennet.ru/cgi-bin/opennet/bookmark.cgi?submit=add" target="blank_">Проследить&nbsp;за&nbsp;страницей</a>
+</font>
+</td>
+<td width="65%" align="RIGHT" bgcolor="#E9EAD6">
+<font size="-1">Created&nbsp;1996-2018&nbsp;by&nbsp;<b><a href="https://www.opennet.ru/contact.shtml" title="email mc@tyumen.ru">Maxim&nbsp;Chirkov</a></b></font>&nbsp;&nbsp;<br>
+<font size="-1"><a href="https://www.opennet.ru/add.shtml">Добавить</a>,&nbsp;<a href="https://www.opennet.ru/donate.shtml" style="color: #C00000;">Поддержать</a>,&nbsp;<a href="https://www.opennet.ru/banners2.shtml">Вебмастеру</a>,&nbsp;<a href="https://www.opennet.ru/guide.shtml">ГИД</a></font>&nbsp;&nbsp;
+</td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+
+
+<div align="right"><table><tbody><tr><td>
+<a target="_blank" href="http://www.ihor.ru/"><img src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/ihor_but.png" border="0" height="31" width="88" alt="Hosting by Ihor"></a>
+<script async="" src="./Программирование в Linux с нуля - Глава4. ОКРУЖЕНИЕ_files/analytics.js.Без названия"></script><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123449-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</td></tr></tbody></table>
+</div>
+
+<!--/htdig_noindex-->
+<!-- end of footer -->
+
+
+
+</body></html>

@@ -1,0 +1,764 @@
+
+<!-- saved from url=(0053)https://www.opennet.ru/base/dev/unix_signals.txt.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=KOI8-R"><title>
+OpenNET: статья - Правила использования сигналов в Unix (signal proccess faq select gcc)
+</title>
+<meta name="KeyWords" content="signal, proccess, faq, select, gcc">
+<link rel="preload" href="./Правила использования сигналов в Unix_files/integrator.js.Без названия" as="script"><script id="https://an.yandex.ru/resource/context_static_r_4604.js" src="./Правила использования сигналов в Unix_files/context_static_r_4604.js.Без названия"></script><script src="./Правила использования сигналов в Unix_files/ca-pub-2075278885744463.js.Без названия"></script><script type="text/javascript" src="./Правила использования сигналов в Unix_files/integrator.js.Без названия"></script><link rel="preload" href="./Правила использования сигналов в Unix_files/integrator.js(1).Без названия" as="script"><script type="text/javascript" src="./Правила использования сигналов в Unix_files/integrator.js(1).Без названия"></script><script charset="utf-8" src="./Правила использования сигналов в Unix_files/watch.js.Без названия"></script><script type="text/javascript" charset="utf-8" async="" src="./Правила использования сигналов в Unix_files/second.js.Без названия"></script><style type="text/css">.lprfzhcqg,.lprfzhcqg yatag{display:block !important;box-sizing:content-box !important}.lprfzhcqg,.lprfzhcqg a,.lprfzhcqg b,.lprfzhcqg em,.lprfzhcqg iframe,.lprfzhcqg img,.lprfzhcqg table,.lprfzhcqg tbody,.lprfzhcqg td,.lprfzhcqg tr{font-size:inherit !important;background:none !important;border:none !important;border-radius:0 !important;border-spacing:0 !important;border-collapse:collapse !important;box-sizing:content-box !important;clear:none !important;float:none !important;font-variant:normal !important;font-weight:400 !important;letter-spacing:normal !important;line-height:normal !important;margin:0 !important;max-height:none !important;max-width:none !important;min-height:0 !important;min-width:0 !important;outline:none !important;padding:0 !important;position:static !important;text-align:left !important;text-decoration:none !important;text-indent:0 !important;text-transform:none !important;vertical-align:baseline !important;visibility:visible !important;word-spacing:normal !important}.lprfzhcqg,.lprfzhcqg a,.lprfzhcqg b,.lprfzhcqg em,.lprfzhcqg img,.lprfzhcqg table,.lprfzhcqg tbody,.lprfzhcqg td,.lprfzhcqg tr{height:auto !important}.lprfzhcqg table{display:table !important;empty-cells:hide !important;table-layout:fixed !important}.lprfzhcqg table,.lprfzhcqg td{font-size:100% !important}.lprfzhcqg td{display:table-cell !important;vertical-align:middle !important}.lprfzhcqg{position:relative !important;z-index:1 !important;-webkit-font-smoothing:antialiased !important;-webkit-text-size-adjust:none !important}.lprfzhcqg .guvbnsacmf,.lprfzhcqg .guvbnsacmf:hover,.lprfzhcqg .guvbnsacmf:hover b,.lprfzhcqg .guvbnsacmf b{display:inline !important;color:#006600 !important;text-decoration:none !important;border-bottom-color:rgba(0,102,0,0.4) !important;border-bottom-width:1px !important;border-bottom-style:solid !important}.lprfzhcqg .guvbnsacmf:hover,.lprfzhcqg .guvbnsacmf:hover b{color:#0066FF !important;border-bottom-color:rgba(0,102,255,0.4) !important}.lprfzhcqg .gshnjiu{display:none !important}.lprfzhcqg .lrqepmh{display:inline !important}.lprfzhcqg .gufgjzvcf{overflow-wrap:break-word !important;word-wrap:break-word !important;-webkit-hyphens:auto !important;-ms-hyphens:auto !important;hyphens:auto !important}.lprfzhcqg .hzfbqjst,.lprfzhcqg .hzfbqjst b{line-height:inherit !important;text-decoration:none !important;word-break:break-word !important;color:#0000CC !important;border-bottom-color:rgba(0,0,204,0.4) !important;border-bottom-width:1px !important;border-bottom-style:solid !important}.lprfzhcqg .hzfbqjst b{border-bottom:none !important;font-weight:700 !important}.lprfzhcqg .jquglw{display:inline !important}.lprfzhcqg .bprkozul{display:inline !important}.lprfzhcqg .loprmtf .dvadiffx{border:none !important;color:#fff !important;font-weight:700 !important;font-size:16px !important;text-shadow:#333 0 0 50px !important}.lprfzhcqg .insyitnp{display:inline !important;font-weight:700 !important}.lprfzhcqg .kxebfkdlg{font-size:10px !important;line-height:13px !important;height:13px !important;display:inline-block !important;padding:0 8px !important;background-color:#feda5b !important;white-space:nowrap !important}.lprfzhcqg .kxebfkdlg .dvadiffx{color:#000 !important;font-weight:700 !important;border:none !important}.lprfzhcqg .dnjmlp{display:block !important;overflow:hidden !important}.lprfzhcqg .jsnjijfd{position:relative !important}.lprfzhcqg .bykhgeni{position:absolute !important;top:0 !important;left:0 !important;width:100% !important}.lprfzhcqg .boczpf{position:relative !important;z-index:1 !important}.lprfzhcqg .lqefxe{display:inline !important;-webkit-box-decoration-break:clone !important;box-decoration-break:clone !important}.lprfzhcqg .izxhwfxt{display:inline !important;opacity:0 !important}.lprfzhcqg .ewtwyuzvm,.lprfzhcqg .jnfgmjbnmr b{font-weight:700 !important}.lprfzhcqg .ewtwyuzvm{white-space:nowrap !important;max-width:100% !important;display:inline-block !important}.lprfzhcqg .kveufjb{color:#0000CC !important;text-decoration:none !important;border-bottom-color:rgba(0,0,204,0.4) !important;border-bottom-width:1px !important;border-bottom-style:solid !important}.lprfzhcqg .kywgibu{cursor:pointer !important}.lprfzhcqg .evlubl{z-index:-1 !important;transition:z-index 0s linear .4s !important}.lprfzhcqg .evlubl,.lprfzhcqg .iunstdd{position:absolute !important;top:0 !important;left:0 !important;width:100% !important;height:100% !important;overflow:hidden !important}.lprfzhcqg .iunstdd{margin-left:100% !important;transition:margin-left .4s ease-out !important}.lprfzhcqg .jsdtar,.lprfzhcqg .evjqczrvh{position:absolute !important;margin-left:0 !important;width:100% !important;height:100% !important;transition:margin-left .4s ease-out !important}.lprfzhcqg .jsdtar{background:#FFF9F0 !important;background:rgba(255, 255, 255, 0.98) !important}.lprfzhcqg .evjqczrvh{margin-left:-100% !important;background:#FFF9F0 !important}.lprfzhcqg .ltjioo{z-index:10 !important;transition:z-index 0s !important}.lprfzhcqg .ltjioo .iunstdd{margin-left:0 !important}.lprfzhcqg .mzwybvebc .jsdtar{margin-left:100% !important}.lprfzhcqg .mzwybvebc .evjqczrvh{margin-left:0 !important}.lprfzhcqg .evlubl .eoquck{left:0 !important}.lprfzhcqg .injcoxyzco{position:relative !important;padding:4px !important}.lprfzhcqg .jvnvna svg{display:block !important}.lprfzhcqg .jvnvna polygon{fill:#000000 !important}.lprfzhcqg .dwvyzsh{margin:-3px !important;width:1em !important;height:1em !important;line-height:1em !important;text-align:center !important;font-size:18px !important}.lprfzhcqg .gtgrhizb{position:absolute !important;top:50% !important;right:100% !important;margin-top:-9px !important;margin-right:6px !important;padding:0 4px !important;max-width:120px !important;height:18px !important;line-height:18px !important;color:#fff !important;background:#333 !important;background-color:rgba(0,0,0,.8) !important;border-radius:1px !important;visibility:hidden !important;font-size:11px !important;white-space:nowrap !important}.lprfzhcqg .awtlxqt{position:absolute !important;top:3px !important;right:-6px !important;display:block !important;overflow:hidden !important;width:0 !important;height:0 !important;border-style:solid !important;border-width:6px 0 6px 6px !important;border-color:transparent transparent transparent #333 !important;border-color:transparent transparent transparent rgba(0,0,0,.8) !important}.lprfzhcqg .mpcugbwt{position:relative !important;color:#fff !important;letter-spacing:.04em !important}.lprfzhcqg .mnjtaxlo:hover .gtgrhizb{visibility:visible !important}.lprfzhcqg .lzqmizc:hover .gtgrhizb{display:none !important}.lprfzhcqg .mxjewyqzqz{visibility:visible !important}.lprfzhcqg .mxjewyqzqz .gtgrhizb{display:none !important}.lprfzhcqg .iskrjce .gtgrhizb{height:19px !important;line-height:19px !important}.lprfzhcqg .iskrjce .awtlxqt{top:2px !important}.lprfzhcqg .brhflinyd .injcoxyzco{padding:5px !important}.lprfzhcqg .brhflinyd .dwvyzsh{margin:-5px !important;font-size:25px !important}.lprfzhcqg .brhflinyd .gtgrhizb{margin-right:9px !important;margin-top:-12px !important;max-width:160px !important;height:22px !important;line-height:22px !important;font-size:13px !important}.lprfzhcqg .brhflinyd .awtlxqt{right:-7px !important;top:4px !important;border-width:7px 0 7px 7px !important}.lprfzhcqg .hxhejxqn{padding:5px !important}.lprfzhcqg .hxhejxqn .injcoxyzco{border-radius:50% !important;background:#FFF9F0 !important;box-shadow:0 1px 0 0 rgba(0,0,0,.2) !important}.lprfzhcqg .hxhejxqn.brhflinyd{padding:5px !important}.lprfzhcqg .kzwycpw .injcoxyzco{border-radius:50% !important;background:rgba(255,249,240,0.8) !important}.lprfzhcqg .iowsdt{padding:4px !important}.lprfzhcqg .iowsdt .gtgrhizb{margin-right:8px !important}.lprfzhcqg .iowsdt .injcoxyzco{border-radius:20% !important}.lprfzhcqg .crqigl .injcoxyzco{background-color:rgba(0,0,0,.25) !important}.lprfzhcqg .crqigl .jvnvna polygon{fill:#fff !important}.lprfzhcqg .mnjtaxlo.lzqmizc .gtgrhizb{display:none !important}.lprfzhcqg .fxfdppibgt{position:absolute !important;left:0 !important;top:0 !important;z-index:6 !important}.lprfzhcqg .fxfdppibgt,.lprfzhcqg .gomndocy,.lprfzhcqg .cqhrdrf{width:100% !important;height:100% !important}.lprfzhcqg .dufnyxa{vertical-align:middle !important;display:inline-block !important}.lprfzhcqg .cqhrdrf{vertical-align:middle !important;text-align:center !important;font-size:13px !important;color:#000 !important}.lprfzhcqg .gnegtfmpq .cqhrdrf{font-size:15px !important}.lprfzhcqg .eoquck{position:absolute !important;top:0 !important;bottom:0 !important;margin-left:0 !important;display:-webkit-flex !important;display:-ms-flexbox !important;display:flex !important;-webkit-align-items:center !important;-ms-flex-align:center !important;align-items:center !important;left:-101% !important;z-index:4 !important;width:100% !important;opacity:.98 !important;border:none !important;box-sizing:border-box !important;transition:margin-left 0s ease-out .4s,left .4s ease-out !important}.lprfzhcqg .eoquck.byfjxqiyd{margin-left:201% !important;left:-201% !important;transition:margin-left 0s,left .4s ease-out !important}.lprfzhcqg .kyeqjtkfz{display:block !important;margin:auto !important;padding:0 !important;border-radius:3px !important;z-index:11 !important;font-size:1em !important}.lprfzhcqg .fyinmm{color:#000 !important;font-weight:700 !important}.lprfzhcqg .kyeqjtkfz .ioptfzr{display:inline-block !important;margin:0 10px 0 0 !important}.lprfzhcqg .kyeqjtkfz .lpouzy{text-decoration:none !important;color:#00c !important;cursor:pointer !important;border-bottom:none !important}.lprfzhcqg .kyeqjtkfz .lpouzy:hover{color:#c00 !important}.lprfzhcqg .kyeqjtkfz.fxexskkzm{padding-top:0 !important}.lprfzhcqg .kyeqjtkfz.fxexskkzm .fyinmm{display:inline-block !important;margin-right:10px !important}.lprfzhcqg .kyeqjtkfz.fxexskkzm .etxsasl{top:3px !important}.lprfzhcqg .kyeqjtkfz.kpbkocelwm{padding:.2em .5em !important}.lprfzhcqg .kyeqjtkfz.kpbkocelwm .ioptfzr,.lprfzhcqg .kyeqjtkfz.kpbkocelwm .fyinmm{display:block !important;font-size:.9em !important;margin:0 0 .4em !important}.lprfzhcqg .kyeqjtkfz.kpbkocelwm .crbqrbesg{right:1px !important;top:1px !important}.lprfzhcqg .kyeqjtkfz.fozagg{padding:.5em 1.3em !important}.lprfzhcqg .kyeqjtkfz.fozagg .fyinmm{font-size:1.2em !important;display:block !important;margin:0 .6em 1em 0 !important}.lprfzhcqg .kyeqjtkfz.fozagg .ioptfzr{display:block !important;margin:.75em .6em 0 0 !important}.lprfzhcqg .kyeqjtkfz.fozagg .lpouzy{line-height:1.4em !important}.lprfzhcqg .kyeqjtkfz.kxcpvif{margin:.25em auto !important;padding:0 1em !important}.lprfzhcqg .kyeqjtkfz.kxcpvif .fyinmm{display:block !important;margin:0 .6em 0 0 !important}.lprfzhcqg .kyeqjtkfz.kxcpvif .ioptfzr{display:block !important;margin:.5em .5em 0 0 !important}.lprfzhcqg .kyeqjtkfz.kxcpvif .lpouzy{line-height:1.4em !important}.lprfzhcqg .krvvsdlukw .eoquck,.lprfzhcqg .mnmhlxp .eoquck{bottom:1px !important}.lprfzhcqg .infqschisg.krvvsdlukw .eoquck,.lprfzhcqg .juralegvf.krvvsdlukw .eoquck,.lprfzhcqg .dryabu.krvvsdlukw .eoquck,.lprfzhcqg .jqbmcynxtg.mnmhlxp .eoquck{bottom:0 !important}.lprfzhcqg .fuidcxtxv{position:absolute !important;z-index:11 !important;right:0 !important;top:0 !important}.lprfzhcqg .kpfdqmjacg{position:absolute !important;left:-101% !important;top:0 !important;width:100% !important;height:100% !important;display:block !important}#lprfzhcqg .jotgwsqgb .iquimqgob,#lprfzhcqg .jotgwsqgb .bvbjfxngw{display:none !important}#lprfzhcqg .jotgwsqgb .kpfdqmjacg{left:0 !important;transition:left .4s ease-out !important}.lprfzhcqg .ktqmlynh.enkfedjfji{position:relative !important;z-index:1 !important;padding:.7em !important;width:auto !important;min-height:100% !important;overflow:hidden !important;font-size:14.4px !important;color:#000000 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .cuoqvudy{box-sizing:border-box !important}.lprfzhcqg .ktqmlynh.enkfedjfji .lrkrsxrslx{position:relative !important;overflow:hidden !important}.lprfzhcqg .ktqmlynh.enkfedjfji .enuzhafsor{position:absolute !important;bottom:0 !important;left:0 !important;right:0 !important;z-index:2 !important;padding-right:10px !important;font-size:14px !important;pointer-events:none !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij{pointer-events:auto !important;padding:2px 0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .fzhwwvqc{background:#0000CC !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .lqefxe{padding:2px 7px !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji .gryiiij .guvbnsacmf b{color:#FFFFFF !important;border-bottom-width:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl{pointer-events:auto !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .jsnjijfd{margin:2px 0 1px !important;font-size:1.15em !important;line-height:1.3em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .fzhwwvqc{background-color:#FFF9F0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .lqefxe{padding:3px 7px 4px 0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf b{padding:3px 0 !important;color:#000000 !important;border-bottom-width:0 !important;font-weight:700 !important;letter-spacing:.01em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji .hrqgzgfl .guvbnsacmf:hover b{color:#0066FF !important}.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti{line-height:1.2em !important;font-size:1.15em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf b{font-weight:700 !important;letter-spacing:.01em !important;border-bottom-width:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji .evatfti .guvbnsacmf:hover b{color:#0066FF !important}.lprfzhcqg .ktqmlynh.enkfedjfji .mpelmyqx{margin-top:.6em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .lzsgjl{margin-top:.8em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .lzsgjl .btinff{margin-right:1em !important;margin-bottom:.25em !important;display:inline-block !important;vertical-align:middle !important}.lprfzhcqg .ktqmlynh.enkfedjfji .krcqyvimxk{margin-top:.8em !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gzjnnribra .esysim{border-radius:5px !important;margin-right:.5em !important;vertical-align:bottom !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gzjnnribra .ivxgwic{display:inline-block !important;vertical-align:bottom !important}.lprfzhcqg .ktqmlynh.enkfedjfji .gwrusqmll{margin-top:1em !important;width:100% !important}.lprfzhcqg .jwccgkcihf .gryiiij{margin-top:.6em !important}.lprfzhcqg .jwccgkcihf .mpelmyqx{margin-top:.9em !important;line-height:1.3em !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq{padding:0 !important;font-size:13px !important;margin-bottom:10px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .mpelmyqx,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .fvajtcd,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .fzhoxjjdg,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lzsgjl,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lzsgjl .btinff,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .gwrusqmll,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .aqehuu,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga{margin:0 !important;padding:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .fvajtcd,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lzsgjl,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .gwrusqmll,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga{margin-top:8px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .aqehuu,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .btinff{margin-top:4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .mpelmyqx{margin-top:7px !important;font-size:13px !important;line-height:16px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lzsgjl .btinff:first-child,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .aqehuu:first-child{margin-top:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .kyuxravn,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hxcjgzysgm{margin-top:13px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lzsgjl .btinff,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .aqehuu{margin-top:4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hnlsbuhrd,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .btinff{font-size:12px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .btinff{display:block !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .gsltclhakx .btinff{display:inline-block !important;width:50% !important;margin-top:0 !important;margin-bottom:4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .kwxolgisq{max-width:none !important;margin-top:12px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .lrkrsxrslx,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jvswlcca{height:120px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jvswlcca{left:0 !important;z-index:3 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .bxhomhivk{position:relative !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga{position:relative !important;white-space:nowrap !important;display:inline-block !important;line-height:22px !important;padding:0 8px !important;background:#0000CC !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .ipiiiayga .guvbnsacmf b{color:#FFFFFF !important;border-bottom-width:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .luyhwmi,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hzfbqjst,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jquglw{border:0 !important;font-size:14px !important;display:inline-block !important;line-height:14px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti .guvbnsacmf b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .luyhwmi .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .luyhwmi .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .luyhwmi .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .luyhwmi .guvbnsacmf b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hzfbqjst .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hzfbqjst .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hzfbqjst .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .hzfbqjst .guvbnsacmf b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jquglw .guvbnsacmf,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jquglw .guvbnsacmf:hover,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jquglw .guvbnsacmf:hover b,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .jquglw .guvbnsacmf b{color:#000 !important;font-weight:700 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .evatfti{display:block !important;margin-top:6px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq .fxrjxpvah{display:none !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge .luyhwmi{position:relative !important;top:-3px !important;left:8px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge .hzfbqjst{position:relative !important;display:inline !important;background:#fff !important;padding:5px 0 !important;line-height:20px !important;overflow:hidden !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge .hzfbqjst:before{content:"" !important;position:absolute !important;top:0 !important;left:-20px !important;height:1000% !important;width:21px !important;background:#fff !important;z-index:1 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge .byiezzgeh{display:inline !important;position:relative !important;z-index:2 !important;left:-8px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge.ctnhsm .luyhwmi,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge.ctnhsm .evatfti,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge.ctnhsm .hzfbqjst,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge.ctnhsm .jquglw{font-size:18px !important;line-height:18px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.byrljpjf.frkohgge.ctnhsm .evatfti{margin-top:8px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.judpvgbnz .dzwiry,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.judpvgbnz .mwgexhslr,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.bnksdp .dzwiry,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.bnksdp .mwgexhslr,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.fovaitq .dzwiry,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.fovaitq .mwgexhslr,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.ctnhsm .dzwiry,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.ctnhsm .mwgexhslr{width:50% !important;display:inline-block !important;vertical-align:top !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.judpvgbnz .avqtomrbzz .aqehuu,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.bnksdp .avqtomrbzz .aqehuu,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.fovaitq .avqtomrbzz .aqehuu,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.ctnhsm .avqtomrbzz .aqehuu{width:50% !important;display:inline-block !important;vertical-align:top !important;margin-top:0 !important;margin-bottom:4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bpsppvkl{color:#fff !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .dsapdo{border-radius:8px !important;border:2px solid #fff !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .dsapdo .lvlfpw{background:#fff !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .dsapdo .bxhomhivk{border-radius:6px !important;opacity:.99 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .fqybfi{margin-top:8px !important;text-align:center !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .fqybfi .muksjfq{font-size:16px !important;font-weight:700 !important;margin-left:5px !important;top:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .iuwbklt{margin-top:9px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .iqwvcq{height:15px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .iqwvcq.auncaquxf .lqbzsftk{fill:#616161 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .iqwvcq svg{margin-right:2px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .aonvhfql.btfcya{color:#000 !important;font-size:10px !important;display:inline-block !important;border:1px solid #000 !important;padding:0 2px !important;margin-left:4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bxbora.evjthgux{line-height:29px !important;height:29px !important;font-size:15px !important;border-radius:15px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .fzhoxjjdg{padding:0 9px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .mpelmyqx{font-size:13px !important;line-height:16px !important;margin-top:16px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .ivxgwic{margin-top:6px !important;text-align:center !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bwteun{position:relative !important;margin:6px 0 0 !important;z-index:3 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bwteun .byiezzgeh{line-height:16px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bwteun.gtokvgejp{padding-left:64px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc .bwteun .dsapdo{position:absolute !important;left:0 !important;bottom:-4px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.bnksdp .ivxgwic,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.bnksdp .huohlawv,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.fovaitq .ivxgwic,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.fovaitq .huohlawv,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.ctnhsm .ivxgwic,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.ctnhsm .huohlawv{margin:0 !important;display:table-cell !important;vertical-align:middle !important;width:100% !important;text-align:left !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.bnksdp .fzhoxjjdg,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.fovaitq .fzhoxjjdg,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.cricirscc.ctnhsm .fzhoxjjdg{padding-right:0 !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.hnxmcvhrx .fzhoxjjdg,.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.hnxmcvhrx .ipiiiayga{padding:0 10px !important}.lprfzhcqg .ktqmlynh.enkfedjfji.cwdqrilq.hnxmcvhrx .enuzhafsor .evatfti{padding-left:10px !important}.lprfzhcqg .lnjaljftbe{display:inline-block !important;overflow:hidden !important;text-align:center !important;font-size:11px !important;opacity:.7 !important;filter:alpha(opacity=70) !important;cursor:pointer !important}.lprfzhcqg .hzuffsde{display:inline-block !important;line-height:14px !important;color:#000000 !important;vertical-align:top !important;border-bottom-color:transparent !important;border-bottom-width:1px !important;border-bottom-style:solid !important}.lprfzhcqg .hzuffsde em{font-style:normal !important}.lprfzhcqg .lnjaljftbe:hover{opacity:1 !important;filter:alpha(opacity=100) !important}.lprfzhcqg .lnjaljftbe:hover .hzuffsde{text-decoration:none !important;border-bottom-color:rgba(0,0,0,0.4) !important;border-bottom-width:1px !important;border-bottom-style:solid !important}.lprfzhcqg .jxuvugeo{opacity:.8 !important;filter:alpha(opacity=80) !important;font-size:1em !important;line-height:1.3em !important;height:1.3em !important}.lprfzhcqg .jxuvugeo .hzuffsde{color:#fff !important;font-size:inherit !important;line-height:inherit !important;height:inherit !important;padding:0 2px !important}.lprfzhcqg .eqoqbyq{overflow:hidden !important;position:relative !important}.lprfzhcqg .fvpqxqqg{position:relative !important;margin:0 !important;margin-left:0px !important;padding:0 !important;font-size:10px !important;margin-top:4px !important;height:14px !important;line-height:14px !important;display:inline-block !important}.lprfzhcqg .dpanwhdsy{position:relative !important;top:0px !important;left:0px !important;right:0px !important;bottom:0px !important;margin-right:0px !important;margin-bottom:0px !important;overflow:hidden !important;border:1px solid #B0B190 !important;border-radius:0px !important;background:#FFF9F0 !important}.lprfzhcqg .bxptvuneyc{margin-left:0 !important;height:auto !important;width:100% !important;table-layout:fixed !important;border-spacing:0px !important;border-collapse:collapse !important}.lprfzhcqg .bnjkcmy{position:relative !important;z-index:1 !important;margin:0 !important;padding:0 !important;height:100% !important;overflow:hidden !important;border:0px solid #B0B190 !important;border-radius:0px !important;border-right-width:0px !important;border-bottom-width:0px !important;background:transparent !important;vertical-align:top !important}.lprfzhcqg .fzllotusi{margin:0 auto !important;height:100% !important}.lprfzhcqg .bytjdrhql .bnjkcmy{border-bottom-width:0px !important}.lprfzhcqg .gpnnebwdt{border-right-width:0px !important}.lprfzhcqg .htdzfbuybl .ktqmlynh.enkfedjfji{padding-left:0 !important;padding-bottom:0 !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.fypxmpnv .bnjkcmy.enxtxvbnl .ktqmlynh.enkfedjfji{margin:0 !important;margin-right:1.0375em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.fypxmpnv .bnjkcmy.aytoiyzua .ktqmlynh.enkfedjfji{margin:0 !important;margin-left:.3458em !important;margin-right:.6916em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.fypxmpnv .bnjkcmy.isqztfmfod .ktqmlynh.enkfedjfji{margin:0 !important;margin-left:.6916em !important;margin-right:.3458em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.fypxmpnv .bnjkcmy.duprxsq .ktqmlynh.enkfedjfji{margin:0 !important;margin-left:1.0375em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.gpkjfpbrw .bnjkcmy.enxtxvbnl .ktqmlynh.enkfedjfji{margin:0 !important;margin-right:.6444em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.gpkjfpbrw .bnjkcmy.aytoiyzua .ktqmlynh.enkfedjfji{margin:0 !important;margin-left:.3222em !important;margin-right:.3222em !important}.lprfzhcqg .htdzfbuybl .bxptvuneyc.gpkjfpbrw .bnjkcmy.isqztfmfod .ktqmlynh.enkfedjfji{margin:0 !important;margin-left:.6444em !important}.lprfzhcqg .htdzfbuybl .mpelmyqx.jnfgmjbnmr{margin-top:4px !important}</style><script type="text/javascript" async="" crossorigin="anonymous" src="./Правила использования сигналов в Unix_files/host.js.Без названия"></script></head><body bgcolor="#DDE1C2" text="#002040">
+<link rel="stylesheet" href="./Правила использования сигналов в Unix_files/opennet4.css" type="text/css">
+<!--htdig_noindex-->
+<form method="get" action="https://www.opennet.ru/search.shtml">
+<aside>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tbody><tr>
+<td valign="BOTTOM" bgcolor="#E9EAD6" style="background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left">
+<a href="https://www.opennet.ru/"><img src="./Правила использования сигналов в Unix_files/opennet2.gif" height="60" width="249" alt="The OpenNET Project" border="0"></a><br>
+</td>
+
+<td bgcolor="#B0B190" width="1"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td>
+
+<td valign="TOP" align="RIGHT" width="728" height="90" bgcolor="#D9DAC6">
+<table border="0" cellpadding="0" width="728">
+<tbody><tr>
+<td height="90" bgcolor="#D9DAC6">
+<p></p>
+
+</td>
+</tr>
+</tbody></table>
+</td>
+
+<td bgcolor="#B0B190" width="1"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td>
+<td width="40" bgcolor="#E9EAD6" style="background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left">&nbsp;</td>
+<td bgcolor="#B0B190" width="1"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td>
+
+<td valign="TOP" align="RIGHT" width="0" bgcolor="#E9EAD6" rowspan="3">
+</td>
+
+</tr>
+
+<tr bgcolor="#B0B190"><td colspan="6"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td></tr>
+
+
+<tr bgcolor="#E9EAD6">
+<td align="CENTER" colspan="5">
+<table width="100%">
+<tbody><tr>
+<td rowspan="2" width="300" nowrap="" class="h">
+<input type="hidden" name="exclude" value="index|/man.shtml"><a href="https://www.opennet.ru/search.shtml" class="h"><u>Поиск</u></a>&nbsp;(<a href="https://www.opennet.ru/keywords/" class="h">теги</a>):&nbsp;<input type="text" size="20" name="words" value="" title="для поиска в google наберите &quot;g фраза&quot;">
+</td><td width="18%">
+&nbsp;   <a href="https://www.opennet.ru/opennews/" class="h"><b><u>НОВОСТИ</u></b></a> (<a href="https://www.opennet.ru/news/opennet.shtml" class="h">+</a>)
+</td><td width="18%">
+  <a href="https://www.opennet.ru/mp/" class="h"><b><u>КОНТЕНТ</u></b></a>
+</td><td width="16%">
+  <a href="http://wiki.opennet.ru/" class="h"><b><u>WIKI</u></b></a>
+</td><td width="16%">
+   <a href="https://www.opennet.ru/man.shtml" class="h"><b><u>MAN'ы</u></b></a>
+</td><td width="16%">
+   <a href="https://www.opennet.ru/forum/" class="h"><b><u>ФОРУМ</u></b></a>
+</td><td width="16%" align="right">
+   <a href="https://twitter.com/opennetru"><img src="./Правила использования сигналов в Unix_files/twitter.png" height="16" width="16" alt="twitter" title="Twitter" border="0"></a>&nbsp;<a href="https://vk.com/opennet"><img src="./Правила использования сигналов в Unix_files/vkontakte.gif" height="16" width="16" title="ВКонтакте" border="0"></a>&nbsp;<a href="https://t.me/opennet_ru"><img src="./Правила использования сигналов в Unix_files/telegram2.png" height="16" width="16" title="Telegram" border="0"></a>&nbsp;<a href="https://zen.yandex.ru/opennet"><img src="./Правила использования сигналов в Unix_files/zen.gif" height="16" width="16" title="Yandex Zen" border="0"></a>&nbsp;<a href="https://www.facebook.com/OpenNet.News/"><img src="./Правила использования сигналов в Unix_files/facebook.gif" height="16" width="16" title="Facebook" border="0"></a>
+</td></tr>
+</tbody></table>
+</td>
+<td bgcolor="#B0B190" width="1"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td>
+</tr>
+<tr bgcolor="#B0B190"><td colspan="7"><img src="./Правила использования сигналов в Unix_files/p.gif" height="2" width="1" alt=""></td></tr>
+</tbody></table>
+</aside>
+<style>
+    .hdr_mobile {
+	text-align: center; 
+	display: none;
+	margin: 0px;
+	padding: 0px;
+    }
+</style>
+<div class="hdr_mobile">
+<div style="margin-left: auto; margin-right: auto; width: 100%; height: 70px; border:1px solid #b0b190; min-width: 360px; max-width: 600px; background: #E9EAD6 url(&#39;/back.gif&#39;) repeat-x bottom left;">
+<div style="float:left; width: 249px; height: 60px; margin-top: 10px;">
+<a href="https://www.opennet.ru/"><img src="./Правила использования сигналов в Unix_files/opennet2_lite.gif" style="height: 60px; width: 249px; border: 1px;" alt="The OpenNET Project / Index page"></a>
+</div>
+<div style="float: left; text-align: center; height: 70px; width: 331px; padding: 5px; margin-left: 10px;">
+<br><small>[ <a href="https://www.opennet.ru/opennews/">новости</a>/<a href="https://www.opennet.ru/opennews/?full_lines=15&amp;lines=15&amp;mid_lines=00">++</a> | <a href="https://www.opennet.ru/forum/">форум</a> | <a href="http://wiki.opennet.ru/">wiki</a> | <a href="https://www.opennet.ru/keywords/">теги</a>
+]</small>
+<a href="https://t.me/opennet_ru"><img src="./Правила использования сигналов в Unix_files/telegram2.png" height="16" width="16" title="Telegram" border="0"></a>
+</div>
+</div>
+</div>
+<div style="clear: both;"></div>
+
+
+<div style="float: left; width: 279; text-align: left;padding-right: 60px;" id="adv">
+</div>
+<div style="padding-top: 0px;position:absolute;left:50%;margin-left:-235px;width:470px;" id="adv2">
+</div>
+<div style="width: 279;float: right;" id="adv3">
+</div>
+<div style="clear: both;"></div>
+<br>
+</form>
+<!--/htdig_noindex-->
+
+
+
+<style>
+PRE { 
+     overflow-x: auto;
+     white-space: pre-wrap; 
+}
+</style>
+<div style="float: left; width:75%; min-width: 640px; max-width: 1200px; vertical-align: top;">
+
+
+<center><h3><font color="#000090">
+Правила использования сигналов в Unix (signal proccess faq select gcc)
+</font></h3></center>
+<br>
+<table border="0" cellspacing="0" cellpadding="1" bgcolor="#B0B190" width="100%">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="#E9EAD6" align="CENTER" width="100%">
+<tbody><tr bgcolor="#000000"><td colspan="7"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td></tr>
+<tr align="CENTER">
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=prev">&lt;&lt; Предыдущая</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=index">ИНДЕКС</a></small></td>
+<td><small><a href="https://www.opennet.ru/search.shtml">Поиск в статьях</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=raw">src</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=setbookmark">Установить закладку</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=getbookmark">Перейти на закладку</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=next">Следующая &gt;&gt;</a></small></td>
+</tr><tr bgcolor="#000000"><td colspan="7"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td></tr>
+</tbody></table></td></tr></tbody></table>
+<pre><b>Ключевые слова:</b> <a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=signal">signal</a>, <a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=proccess">proccess</a>, <a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=faq">faq</a>, <a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=select">select</a>, <a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=gcc">gcc</a>,  (<a href="https://www.opennet.ru/cgi-bin/opennet/ks.cgi?mask=signal%20proccess%20faq%20select%20gcc">найти похожие документы</a>)<br>
+<font color="#0000C0">From: Valentin Nechayev &lt;<a href="mailto:netch@segfault.kiev.ua">netch@segfault.kiev.ua</a>&gt;</font>
+<font color="#0000C0">Newsgroups: fido7.ru.unix.prog</font>
+<font color="#0000C0"><b>Subject: Правила использования сигналов в Unix</b></font>
+<font color="#0000C0">Date: Tue, 26 Aug 2003 08:07:19 +0000 (UTC)</font>
+
+Основной текст написал: Yar Tikhiy &lt;<a href="mailto:yar@comp.chem.msu.su">yar@comp.chem.msu.su</a>&gt;
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Предисловие
+
+Если судить по исходникам популярных программ и обсуждениям Usenet
+за последние лет 20, то обработка сигналов Unix -- это игра, в
+которой большинство участвует, так и не удосужившись выучить правила.
+Программисты привыкли, что если код не засбоит хотя бы один раз,
+то он будет работать во всех случаях.  Сигналы оказались для них
+хорошо замаскированной ловушкой, из которой всем нам предстоит еще
+долго выкарабкиваться (о последствиях неаккуратной работы с сигналами
+для безопасности см. статью "Delivering Signals for Fun and Profit":
+<a href="http://razor.bindview.com/publish/papers/signals.txt">http://razor.bindview.com/publish/papers/signals.txt</a>).
+
+Академическое сообщество пользователей Unix всегда поощряло
+"экспериментальный" стиль программирования, когда во главу угла
+ставится сам факт реализации той или иной возможности, а не качество
+решения.  В 1986 году даже почтенный Chris Torek допускал высказывания
+вроде этого: "Хотя вызывать exit(3) из обработчика сигнала не вполне
+надежно, на практике это не создает никаких проблем".  Впрочем, сам
+мистер Torek отрекся от подобной ереси к началу 1990-х; зато
+недостатка в программистах, обрабатывающих сигналы по принципу
+"авось пронесет", и книгах, дающих сомнительные советы, не ощущается
+до сих пор.
+
+Что удивительно в такой ситуации, правила "игры в сигналы" на самом
+деле весьма просты.  Поэтому хотелось бы их четко сформулировать и
+указать на основные следствия из них.  Для начала я попытаюсь это
+сделать для случая традиционных сигналов POSIX в однонитевой среде.
+Комментарии и дополнения приветствуются.
+
+
+
+ПРАВИЛА ИГРЫ В СИГНАЛЫ UNIX
+
+Правило 1
+
+Посланный процессу сигнал может быть проигнорирован, заблокирован,
+или доставлен.  Под доставкой понимается действие по умолчанию или
+вызов назначенного обработчика.  Рассмотрим эти случаи по отдельности.
+
+1. Если сигнал игнорируется, то он не оказывает никакого воздействия
+на процесс.  В частности, не прерываются по EINTR прерываемые
+операции.
+
+2. Если сигнал блокируется, то его обработчик будет вызван один раз
+(независимо от того, сколько раз был послан сигнал) после снятия
+блокировки.
+
+3. Если сигнал обрабатывается по умолчанию как "отвергнуть сигнал"
+(discard signal), то это полностью эквивалентно его игнорированию
+(см. п. 1.1).  В некоторых руководствах это действие явно именуется
+"ignore".  Действиями по умолчанию, в зависимости от типа сигнала,
+могут также быть "завершить процесс" (возможно, с записью образа
+памяти), "приостановить процесс" и "продолжить процесс".
+
+4. Если процесс назначил сигналу собственный обработчик и сигнал
+должен быть доставлен, то будет вызван этот обработчик.
+
+	Если у сигнала установлен через sigaction(2) флаг SA_RESETHAND,
+	то эмулируется поведение SysV signal(): обработчик сигнала будет
+	установлен равным SIG_DFL (обработка по умолчанию) в момент
+	доставки, т.е. непосредственно перед вызовом текущего
+	обработчика.
+
+	На время вызова обработчика текущий сигнал блокируется,
+	если не установлен флаг SA_NODEFER (то есть, сигнал добавляется
+        к маске, описанной в sa_mask).  Это необходимо, чтобы
+	избежать зацикливания обработчика.
+
+	Обработчику передается номер текущего сигнала, что позволяет
+	использовать один обработчик для нескольких сигналов. Возможна
+        передача дополнительной информации (см. SA_SIGINFO в SUS).
+
+	Между посылкой сигнала и его доставкой может пройти
+	неограниченное количество времени, даже если сигнал не
+	заблокирован.  Следовательно, один и тот же сигнал может
+	быть послан процессу несколько раз перед тем, как он будет
+	доставлен.  Тем не менее, обработчик будет вызван единожды,
+	так как система запоминает только сам факт посылки каждого
+	сигнала.
+
+
+Правило 2
+
+Любая операция может быть временно прервана вызовом обработчика
+асинхронного сигнала, если на момент ее выполнения сигнал не
+заблокирован и не игнорируется.
+
+	Сигналы посылаются и доставляются асинхронно в подавляющем
+	большинстве случаев.  Существует, по сути, лишь один случай
+	синхронной посылки сигнала: когда процесс посылает сигнал
+	сам себе, с помощью функций abort(3) или raise(3).  Согласно
+	C99 и SUSv3, если в ответ на raise(3) должен быть вызван
+	обработчик сигнала, raise(3) может вернуть управление только
+	после того, как это сделает обработчик.
+
+	В системах, совместимых с POSIX, вызов функции
+		raise(signo);
+	должен быть эквивалентен вызову конструкции:
+		kill(getpid(), signo);
+	Значит, в POSIX такую конструкцию можно рассматривать как
+	еще один способ синхронной посылки сигнала.  Раздел SUSv3,
+	посвященный функции kill(), подробно обсуждает посылку
+	процессом сигнала самому себе и указывает, что в этом случае
+	сигнал должен быть доставлен до того, как kill() вернет
+	управление.
+
+
+Правило 3
+
+Существует ровно один тип статических данных, sig_atomic_t, переменную
+которого может установить обработчик асинхронного сигнала.  Поведение
+приложения не определено, если асинхронно вызванный обработчик
+обращается к статическим данным любым другим способом.
+
+	По-видимому, это весьма жесткое ограничение связано с
+	поддержкой архитектур, в которых обработчик асинхронного
+	сигнала не может напрямую обращаться к основной памяти
+	процесса.
+
+
+Правило 4
+
+Если обработчик асинхронного сигнала завершается возвратом, то
+текущая операция может быть продолжена или прервана, в зависимости
+от типа операции и значения флага SA_RESTART для этого сигнала.
+Есть несколько случаев.
+
+1. Если для текущего сигнала не установлен флаг SA_RESTART, то
+некоторые системные вызовы будут прерваны с ошибкой EINTR.  Если
+же флаг SA_RESTART установлен, то выполнение этих вызовов будет
+продолжено.
+
+	Список прерываемых вызовов может быть приведен в sigaction(2);
+	это вызовы ввода-вывода и wait(2).  SUSv3 такого списка не
+	приводит, однако говорит, что сигнал без SA_RESTART прерывает
+	любой вызов, который может возвращать ошибку EINTR.
+
+2. Функции семейства sleep (sleep(3), nanosleep(2) и т.п.) будут
+прерваны любым доставленным сигналом, вне зависимости от наличия у
+него флага SA_RESTART.
+
+3. Вызов connect(2) в блокирующем режиме будет перван любым
+доставленным сигналом, независимо от его флагов, однако сама операция
+установки соединения будет продолжена в асинхронном режиме.  Об
+окончании операции можно узнать, передав дескриптор в poll(2) или
+select(2): он будет помечен как готовый к записи.
+
+4. Вызовы select(2), pselect(2) и poll(2) могут быть прерваны
+сигналом.
+
+	Согласно SUSv3, poll(2) прерывается любым доставленным
+	сигналом; будут ли select(2) и pselect(2) учитывать флаг
+	SA_RESTART, определяет реализация.
+
+5. Выполнение кода процесса и остальных системных вызовов будет
+продолжено.
+
+
+Следствия _для асинхронных сигналов_
+
+1. [Из п. 2] Из обработчика сигнала нельзя выполнять общий c другими
+частями процесса нереентерабельный участок кода, если он не защищается
+всякий раз путем блокировки соответствующих сигналов.
+
+	Здесь нереентерабельность понимается в широком смысле как
+	зависимость по статическим данным, требующим сериализации
+	доступа.  Таким образом, нереентерабельной может быть как
+	отдельная функция, так и целая библиотека.  Если несколько
+	участков кода обращаются к общим данным, требующим сериализации,
+	то все они будут взаимно нереентерабельны.  В англоязычной
+	литературе есть более точный термин "async-signal-safe", то
+	есть, безопасный по отношению к асинхронным сигналам.
+
+2. [Из п. 2, с. 1]  Из обработчика сигнала нельзя вызывать
+нереентерабельные библиотечные функции (н.б.ф.), если только
+устройством программы не гарантируется, что на момент _каждого_
+вызова _любой_ н.б.ф. все сигналы, чьи обработчики содержат вызовы
+_любых_ н.б.ф., не будут заблокированы.
+
+	Так как внутренние зависимости между н.б.ф. полностью зависят
+	от реализации, вложенный вызов _любой_ н.б.ф.  может привести
+	к неопределенному поведению _всех_ н.б.ф.  К примеру,
+	изрядное количество библиотечных функций явно или неявно
+	вызывают malloc(3); так что разрушение структур malloc(3)
+	в результате вложенного вызова приведет к сбою многих б.ф.
+
+	Стандарт C99 утверждает, что из обработчика асинхронного
+	сигнала можно вызывать только abort(3), _exit(2), _Exit(),
+	а также signal(3) с первым аргументом, равным номеру текущего
+	сигнала [C99 #7.14.1.1].  Стандарты POSIX и SUS приводят
+	довольно объемистый список реентерабельных функций.  В
+	прочих системах этот список, очевидно, определяется
+	реализацией.
+
+3. [Из п. 1.4, п. 2] Выполнение обработчика сигнала может быть
+прервано очередным доставленным сигналом.  Чтобы избежать прерывания,
+необходимо заблокировать все или некоторые сигналы на время работы
+чувствительного участка в обработчике.  Проще всего это делать,
+указав маску sa_mask в параметре sigaction(2); эта маска будет
+атомарно установлена на входе в обработчик, а на выходе из него
+будет восстановлено предыдущее значение маски сигналов.
+
+4. [Из с. 1, с. 3] Если один нереентерабельный обработчик установлен
+для нескольких сигналов, то на время работы нереентерабельного участка
+нужно блокировать все эти сигналы.
+
+5. [Из п. 2, п. 3] Необходимо использовать модификатор volatile,
+чтобы указать компилятору на асинхронность изменения переменной типа
+sig_atomic_t.
+
+6. [Из п. 3] Не гарантируется, что обработчик сигнала может читать
+статическую переменную, даже если она -- типа sig_atomic_t.
+
+	Учитывая исторически сложившуюся практику, можно считать
+	чтение переменной типа sig_atomic_t из обработчика сигнала
+	ограниченно переносимым.
+
+7. [Из п. 2, п. 3] Можно использовать только простое присваивание
+переменным sig_atomic_t.  В частности, над ними не следует использовать
+операции ++ и --.  Это касается как обработчиков сигналов, так и
+основного потока (конечно, если соответствующие сигналы не заблокированы
+на момент операций с переменной типа sig_atomic_t).
+
+	В архитектуре RISC нет атомарных арифметических операций над
+	ОЗУ.  В архитектуре CISC они есть, но компилятор не обязан их
+	использовать, например, из соображений оптимизации.
+
+8. [Из п. 3] Если стандартная библиотечная функция, вызванная из
+обработчика сигнала, вернула ошибку, то значение переменной errno
+может быть не определено.
+
+9. [Из п. 2] Вызов даже реентерабельной библиотечной функции из
+обработчика сигнала может привести к изменению значения переменной
+errno.  Следовательно, если обработчик вызывает б.ф., то он должен
+вначале сохранить значение errno, а перед возвратом восстановить его.
+
+	Правило 3 и следствие 8 исключают следствие 9.  Проблема
+	здесь в том, что современные стандарты признают исторически
+	сложившуюся практику обращения к статическим переменным
+	вопреки правилу 3, но крайне не поощряют ее.  Пока что это
+	приводит к подобным противоречиям.
+
+10. [Из п. 2, п. 3, с. 1] "Трюк" с возвратом из обработчика сигнала
+через longjmp(3), кочующий из книги в книгу (даже W.R.Stevens
+приводит его), следует использовать с большой осторожностью.
+Во-первых, longjmp(3) не восстановит статических переменных libc и
+структуру кучи malloc(3) на момент вызова setjmp(3), а значит, он
+ничем не поможет в решении проблемы реентерабельности.  Во-вторых,
+вызов longjmp(3) из обработчика обладает ограниченной переносимостью.
+
+	Изначально longjmp(3) из обработчика сигнала использовался,
+	чтобы обойти особенность 4.2BSD.  Системные вызовы 4.2BSD
+	всегда продолжались после обработки сигнала, если обработчик
+	возвращал управление.  Приходилось совершать longjmp(3),
+	чтобы прервать системный вызов.
+
+	Еще одно историческое применение longjmp(3) из обработчика
+	состояло в обходе изьяна pause(2).  В системах без sigsuspend(2)
+	или sigpause(2) невозможно было гарантировать, что сигнал
+	не придет до вызова pause(2).  Если сигнал посылался
+	однократно, как SIGALRM по истечению таймера, то приложение
+	могло "зависнуть".  Для решения этой проблемы управление
+	из обработчика явно передавали через longjmp(3).  W.R.Stevens
+	приводит пример использования longjmp(3) в обработчике
+	именно для этого случая.
+
+	Существует как минимум одна среда, претендующая на совместимость
+	с POSIX, в которой выход из обработчика сигнала через
+	longjmp(3) приводит к сбою приложения.  Речь идет о Win32
+	и сигнале SIGINT.  Этот сигнал посылается консольному
+	приложению при нажатии ^C и доставляется в специально
+	отведенную нить, даже если приложение спроектировано как
+	однонитевое.  Конечно, этот прецедент может показаться
+	далеким от реалий Unix.  Однако он иллюстрирует разнообразие
+	особенностей, с которыми можно столкнуться в POSIX-совместимых
+	системах.
+
+11. [Из п. 2] Блокировка сигналов часто должна выполняться неразрывно
+с другой операцией.  Для этого существует ряд стандартных механизмов
+и функций.
+
+	Согласно странице руководства sigaction(2) в системах на
+	основе BSD, несколько одновременно ожидающих доставки
+	сигналов будут доставлены так, что каждый последующий сигнал
+	прервет обработчик предыдущего перед его первой машинной
+	командой.  Таким образом, избежать дальнейшего вложенного
+	вызова обработчиков можно, лишь атомарно установив маску
+	сигналов перед входом в текущий обработчик.  Для этого служит
+	маска sa_mask, передаваемая как член структуры sigaction в
+	sigaction(2).
+
+	Чтобы приостановить выполнение программы до прихода
+	определенного сигнала (или любого из заданного множества
+	сигналов), существует системный вызов sigsuspend(2).  Его
+	использование предполагает, что в остальное время интересующий
+	нас сигнал (или их множество) заблокирован, иначе можно его
+	упустить до вызова sigsuspend(2).  Но даже если sigprocmask(2)
+	вызвать непосредственно перед sigsuspend(2), все равно
+	образуется временное окно, на протяжении которого ожидаемый
+	сигнал может оказаться доставлен.  Поэтому sigsuspend(2)
+	принимает в качестве аргумента маску сигналов, которую
+	атомарно устанавливает на время ожидания.
+
+	Системный вызов pselect(2) фактически совмещает в себе
+	функциональность select(2) и sigsuspend(2).  Поэтому он
+	также принимает в качестве одного из аргументов маску
+	сигналов, которую атомарно устанавливает на время ожидания
+	событий.
+
+12. [Из п. 2, с. 1] Для завершения процесса из обработчика сигнала
+следует использовать _exit(2) (POSIX) или _Exit() (C99), которые
+не имеют побочных эффектов, в отличие от exit(3).
+
+	Побочными эффектами exit(3) являются вызов зарегистрированных
+	с помощью atexit(3) деструкторов, закрытие потоков stdio,
+	удаление временных файлов и т.п.  Все это наверняка повлечет
+	вызов н.б.ф.
+
+13. [Из п. 4.1] Если хотя бы у одного сигнала, для которого установлен
+обработчик, нет флага SA_RESTART и этот сигнал не заблокирован, то
+по EINTR может быть прервана _любая_ стандартная библиотечная функция
+ввода-вывода.
+
+
+Практические соображения
+
+При планировании проекта стоит определить границы его переносимости,
+так как требования разных стандартов могут заметно отличаться или
+даже противоречить друг другу, что мы уже видели ранее.  Если
+ограничиться средой Unix, то наиболее здравым выбором, по-видимому,
+будет текущая версия SUS.
+
+	Обращение из обработчика асинхронного сигнала к статическим
+	данным вопреки правилу 3 может считаться ограниченно
+	переносимым, так как работает в большинстве Unix-подобных
+	систем.  Использовать его можно на свой страх и риск, однако
+	следует иметь ввиду возможные последствия для надежности и
+	переносимости приложения.
+
+Не надо относиться к сигналам как к грому и молнии.  В аккуратно
+написанной программе всегда известно, какие сигналы в данный момент
+следует принимать и обрабатывать, а какие лучше держать заблокированными
+или игнорировать.  Зачастую это не требует значительных усилий или
+изменений в структуре программы -- достаточно четко осознавать,
+почему тот или иной сигнал не повредит, скажем, при вызове функции
+ввода-вывода.
+
+Если в вашем проекте сигналы большую часть времени разблокированы
+и у некоторых из них не установлен флаг SA_RESTART, то может быть
+удобно сократить до минимума число вызовов функций ввода-вывода.
+Нужно быть готовым перезапустить каждый такой вызов, если он вернет
+EINTR или выполнит операцию не полностью.  При большом количестве
+вызовов (например, при посимвольном вводе-выводе посредством stdio)
+это потребует соответствующего числа практически повторяющихся
+"оберток", что отрицательно скажется как на производительности, так
+и на удобочитаемости исходных текстов.
+
+Наиболее простой и безопасный подход к обработке сигналов -- когда
+обработчик устанавливает флаг типа sig_atomic_t, а основной поток
+проверяет его и предпринимает необходимые действия.  Если при этом
+необходимо прерывать некоторые операции ввода-вывода, то следует или
+блокировать сигналы на время остальных операций ввода-вывода, или
+особо обрабатывать ошибку EINTR после _всех_ операций ввода-вывода.
+
+В сложных случаях может оказаться удобнее эмулировать синхронные
+сигналы.  Для этого можно держать сигналы заблокированными большую
+часть времени и разблокировать их только в специально отведенных,
+реентерабельных точках программы.  Особенно удобным для этой цели
+является системный вызов pselect(2), который позволяет атомарно
+устанавливать маску сигналов на время своего выполнения.  Конечно,
+это внесет задержку между отправкой сигнала и его обработкой.
+
+	В системах, где pselect(2) отсутствует, его можно частично
+	эмулировать, используя запись из обработчика сигнала в канал
+	(pipe).  Для этого необходимо:
+
+	а) создать канал;
+	б) установить на обоих концах канала режим неблокирующего
+	   ввода-вывода;
+	в) установить обработчик, который станет записывать в этот
+	   канал 1 байт (любой, т.к. доставка через канал не будет
+	   гарантированной) и устанавливать флаг в переменной
+	   типа volatile sig_atomic_t;
+	г) включить читаемый дескриптор сигнального канала в
+	   обработку poll(2)/select(2);
+	д) разблокировать сигнал;
+	е) вызвать poll(2)/select(2);
+	ж) заблокировать сигнал;
+	з) при наличии данных в сигнальном канале читать их оттуда
+	   для очистки буфера;
+	и) если флаг установлен:
+		- сбросить флаг;
+		- предпринять необходимые действия;
+	к) вернуться к д).
+
+	Смысл записи в канал состоит в том, что poll(2)/select(2)
+	вернет управление сразу, если сигнал уже был доставлен в
+	обработчик.  Иначе poll(2)/select(2) стал бы ждать других
+	событий, и реакция на сигнал произошла бы с задержкой.
+	Конечно, возможна потеря сигнала, если буфер сигнального
+	канала уже заполнен.  Однако за счет установки и проверки
+	флага хотя бы один экземпляр сигнала будет когда-нибудь
+	замечен, а это вполне согласуется с моделью сигналов POSIX.
+
+Так как сложные схемы на основе сигналов очевидно ограничены и плохо
+переносимы, с сигналами всегда стоит придерживаться принципа K.I.S.S.:
+"Keep it simple, stupid".  Если вы выучили правила и видите, что
+нетривиальное использование сигналов причиняет слишком много
+неудобств, то вам пора рассмотреть другие средства IPC для вашего
+проекта.
+
+
+Заключение
+
+Автор хотел бы искренне поблагодарить читателей эхи (телеконференции
+FidoNet) RU.UNIX.PROG за ценные замечания и идеи для данной статьи.
+
+Yar Tikhiy &lt;<a href="mailto:yar@comp.chem.msu.su">yar@comp.chem.msu.su</a>&gt;
+
+$Id: signal.txt,v 1.48 2003/07/22 15:50:49 yar Exp $
+
+
+</pre><br>
+<table border="0" cellspacing="0" cellpadding="1" bgcolor="#B0B190" width="100%">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="0" bgcolor="#E9EAD6" align="CENTER" width="100%">
+<tbody><tr bgcolor="#000000"><td colspan="7"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td></tr>
+<tr align="CENTER">
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=prev">&lt;&lt; Предыдущая</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=index">ИНДЕКС</a></small></td>
+<td><small><a href="https://www.opennet.ru/search.shtml">Поиск в статьях</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=raw">src</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=setbookmark">Установить закладку</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=getbookmark">Перейти на закладку</a></small></td>
+<td><small><a href="https://www.opennet.ru/cgi-bin/opennet/jump.cgi?name=unix_signals.txt&amp;ref=next">Следующая &gt;&gt;</a></small></td>
+</tr><tr bgcolor="#000000"><td colspan="7"><img src="./Правила использования сигналов в Unix_files/p.gif" height="1" width="1" alt=""></td></tr>
+</tbody></table></td></tr></tbody></table>
+<br><center id="adv">
+<div id="yandex_ad"><yatag class="lprfzhcqg msbxullus" id="lprfzhcqg" lang="ru"><yatag class="eqoqbyq gsfpqgr csdqawcxr"><yatag class="gshnjiu"></yatag><yatag class="dpanwhdsy gqhjgpu"><table class="bxptvuneyc evlhrgfk fqmrxsgyd"><tbody><tr class="exvoxbhcvi crumuvbhc bytjdrhql"><td class="bnjkcmy enxtxvbnl bokcdh"><yatag class="fzllotusi enkfedjfji ktqmlynh kpncdv apxtbfo buoajfzv jwccgkcihf" data-id="5867212400" data-uniq-id="1523516816887"><yatag class="fzhoxjjdg"><yatag class="evatfti"><yatag class="luyhwmi hopesajva jquglw"><a class="hzfbqjst guvbnsacmf" href="https://an.yandex.ru/count/Be8_BrpjaU450AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C010jW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank"><yatag class="jquglw byiezzgeh"><yatag class="lrqepmh gufgjzvcf">Кроссовер <b>HONDA CR</b>-<b>V</b>! </yatag></yatag><yatag class="jquglw fxrjxpvah"><yatag class="lrqepmh gufgjzvcf">&nbsp;&#8211; Новый. Амбициозный! </yatag></yatag></a></yatag>&nbsp;</yatag><yatag class="dnjmlp gryiiij"><yatag class="jsnjijfd"><yatag class="bykhgeni"><yatag class="lqefxe fzhwwvqc" style="opacity: 1"><yatag class="izxhwfxt"><yatag class="ipiiiayga bprkozul"><a class="dvadiffx guvbnsacmf" href="https://an.yandex.ru/count/Be8_BrpjaU450AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C010jW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank">honda.co.ru</a></yatag></yatag></yatag></yatag><yatag class="lqefxe boczpf"><yatag class="ipiiiayga bprkozul"><a class="dvadiffx guvbnsacmf" href="https://an.yandex.ru/count/Be8_BrpjaU450AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C010jW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank">honda.co.ru</a></yatag></yatag></yatag></yatag><yatag class="mpelmyqx jnfgmjbnmr"><yatag class="lrqepmh gufgjzvcf"><b>Цена</b> от&nbsp;1&nbsp;859&nbsp;900 рублей! Заряжен технологиями! Пройдите тест-драйв у&nbsp;дилеров! </yatag></yatag><yatag class="lzsgjl hxcjgzysgm"><yatag class="btinff esoatg"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BvEVN_u50AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C01FjW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Дилеры</a></yatag><yatag class="btinff aswrhtluq"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BtI7Xey50AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C01GjW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Комплектации и&nbsp;цены</a></yatag><yatag class="btinff cxlbso"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BzOBnO450AC1CN07pre00000E9hw4K02I09Wl0Xe172UyiMI0O01mDiYY07ZljgHBv01uBcqsokO0OA7c9ufk06Mrl-A6C01HjW1ahtM4k01clpL4kW14FW10OW2b946e0AsnaIv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03qFQvvGQ80zJruUy1c0F2WmIe0nAm0mIu1Fy1w0Jr6FW4xlOJY0NkzXEG1VM06A05eVq5g0N3Y0Mm1SE81RW5e8q6m0NrW1Z81Q2D1j05XhG2u0LPy0K1c0Q0qApp3g06NgW6Nia6AGdECsb4253H1YcT0wjfH0XGsGO0003WJW0009075Aa76niiYzw9tXcm1u20a2p01wQFs_eAq0S2u0U62e082D08ceg0WO0mu0YReoA02W712W0000000F0_s0e2u0g0YNhu2i3y5OWBgA8CgWiG1O_soXiR000xFaQ3eMa50C0BWAC5o0k0r9C1sGiR6ooBtedU6UWBxlOJy0i6Y0pqeEI-0UWC0l8D0FeD088E090Em8Gze0x0X3q0?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1ODY3MjEyNDAwIjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Технические характеристики</a></yatag></yatag></yatag><yatag class="evlubl kolpeqy"><yatag class="iunstdd"><yatag class="jsdtar"><yatag class="eoquck"><yatag class="kyeqjtkfz fozagg"><yatag class="fyinmm">Скрыть рекламу:</yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="3-2">Не интересуюсь этой темой</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="14-2">Товар куплен или услуга найдена</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="5-3">Нарушает закон или спам</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="9-5">Мешает просмотру контента</a></yatag></yatag></yatag></yatag><yatag class="evjqczrvh"><yatag class="fxfdppibgt hqcwpbxzdl"><table class="gomndocy"><tbody><tr><td class="cqhrdrf"><yatag class="dufnyxa"><svg width="18" height="18"><path d="M5.485 11.07L2.45 8.037 1.036 9.45l3.035 3.035-.034.036 1.414 1.415 8.485-8.485-1.414-1.414-7.035 7.035z" fill="#000" fill-rule="evenodd"></path></svg></yatag>Спасибо, объявление скрыто.</td></tr></tbody></table></yatag></yatag></yatag></yatag><yatag class="fuidcxtxv kywgibu jxzsotmrk esvghl"><yatag class="dvylel"><yatag class="mnjtaxlo kzwycpw mwnbdxiyxu ivtxnqe"><yatag class="injcoxyzco"><yatag class="jvnvna" style="width: 8px !important; height: 8px !important;"><svg width="8px" height="8px" viewBox="0 0 14 14" version="1.1"><polygon points="14,0.7 13.3,0 7,6.299 0.7,0 0,0.7 6.3,7 0,13.299 0.7,14 7,7.7 13.3,14 14,13.299 7.7,7"></polygon></svg></yatag><yatag class="gtgrhizb"><yatag class="awtlxqt"></yatag><yatag class="mpcugbwt">Скрыть&nbsp;объявление</yatag></yatag></yatag></yatag></yatag></yatag></yatag></td><td class="bnjkcmy aytoiyzua gpnnebwdt"><yatag class="fzllotusi enkfedjfji ktqmlynh kpncdv dojlmlku buoajfzv jwccgkcihf" data-id="5981853677" data-uniq-id="1523516817493"><yatag class="fzhoxjjdg"><yatag class="evatfti"><yatag class="luyhwmi hopesajva jquglw"><a class="hzfbqjst guvbnsacmf" href="https://an.yandex.ru/count/Be8_BnscKNq50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C010jW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank"><yatag class="jquglw byiezzgeh"><yatag class="lrqepmh gufgjzvcf">Мощный Hyundai Tucson</yatag></yatag><yatag class="jquglw fxrjxpvah"><yatag class="lrqepmh gufgjzvcf">&nbsp;&#8211; Больше, чем <b>кроссовер</b></yatag></yatag></a></yatag>&nbsp;</yatag><yatag class="dnjmlp gryiiij"><yatag class="jsnjijfd"><yatag class="bykhgeni"><yatag class="lqefxe fzhwwvqc" style="opacity: 1"><yatag class="izxhwfxt"><yatag class="ipiiiayga bprkozul"><a class="dvadiffx guvbnsacmf" href="https://an.yandex.ru/count/Be8_BnscKNq50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C010jW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank">hyundai.ru</a></yatag></yatag></yatag></yatag><yatag class="lqefxe boczpf"><yatag class="ipiiiayga bprkozul"><a class="dvadiffx guvbnsacmf" href="https://an.yandex.ru/count/Be8_BnscKNq50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C010jW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;" target="_blank">hyundai.ru</a></yatag></yatag></yatag></yatag><yatag class="mpelmyqx jnfgmjbnmr"><yatag class="lrqepmh gufgjzvcf">В&nbsp;обновленных комплектациях: Primary, Family, Lifestyle, Dynamic, High-Tech!</yatag></yatag><yatag class="lzsgjl hxcjgzysgm"><yatag class="btinff esoatg"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BtAJlwG50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C01FjW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Помощь на&nbsp;дороге 24/7</a></yatag><yatag class="btinff aswrhtluq"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_B-vt5oi50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C01GjW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Тест-драйв</a></yatag><yatag class="btinff cxlbso"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BwpuOXO50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C01HjW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Спецпредложения</a></yatag><yatag class="btinff kwbqazgtab"><a class="kveufjb guvbnsacmf" target="_blank" href="https://an.yandex.ru/count/Be8_BtsqiAC50AW1CN07pre00000E9hw4K02I09Wl0Xe172YfQcD3O01Yj0IY071__g-C901sj_Uo2oO0PgBZ8egk06aeOF46C01LjW1Y9A54U01-lpb4EW1w07u0Qgquhu1Y0AKaGQW0ixhf0gv0kQ_tlPxyUn_y0Ard-Us1VW2We20W930Fu03fT2ndG-80xRVnfWFe0C4g0CIi0C4k0J_0UW4pINu1Fpc38W5_EOCa0MDcWsW1TZh0wW5sA03i0NOe0Eu1TYj0y05ZPeDo0NOhGFG1VR50U05U_050PW6WD2iymwW1bwe1bx91Ya9pZDfH0XGqGOfdGEhQKG8KDa60000u4u0002G1nIf1niRB8lUYTuPi0U0W90im0UcZzlw2j070k07XWg020ZG29gAW870CE08vxMI1O0A0S4A00000000y3_O2WBW2e29UlWAmFmLY0keeWog2n05Z_RA6ni003i-HeEXQGK0m0k0emN82u3Kam7P2niRB8lUYTuPw0lyvWpm2mQ83Agquhu1w0m2yWq0-Wq0WWu0a0x0X3sW3i24FG00?stat-id=100500_0&amp;test-tag=279280263104545&amp;banner-test-tags=eyI1OTgxODUzNjc3IjoiMjc5Mjc1OTUzNDU1MTA0In0%3D&amp;">Найти дилера</a></yatag></yatag></yatag><yatag class="evlubl kolpeqy"><yatag class="iunstdd"><yatag class="jsdtar"><yatag class="eoquck"><yatag class="kyeqjtkfz fozagg"><yatag class="fyinmm">Скрыть рекламу:</yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="3-2">Не интересуюсь этой темой</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="14-2">Товар куплен или услуга найдена</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="5-3">Нарушает закон или спам</a></yatag><yatag class="ioptfzr"><a class="lpouzy" data-option-id="9-5">Мешает просмотру контента</a></yatag></yatag></yatag></yatag><yatag class="evjqczrvh"><yatag class="fxfdppibgt hqcwpbxzdl"><table class="gomndocy"><tbody><tr><td class="cqhrdrf"><yatag class="dufnyxa"><svg width="18" height="18"><path d="M5.485 11.07L2.45 8.037 1.036 9.45l3.035 3.035-.034.036 1.414 1.415 8.485-8.485-1.414-1.414-7.035 7.035z" fill="#000" fill-rule="evenodd"></path></svg></yatag>Спасибо, объявление скрыто.</td></tr></tbody></table></yatag></yatag></yatag></yatag><yatag class="fuidcxtxv kywgibu jxzsotmrk esvghl"><yatag class="dvylel"><yatag class="mnjtaxlo kzwycpw mwnbdxiyxu ivtxnqe"><yatag class="injcoxyzco"><yatag class="jvnvna" style="width: 8px !important; height: 8px !important;"><svg width="8px" height="8px" viewBox="0 0 14 14" version="1.1"><polygon points="14,0.7 13.3,0 7,6.299 0.7,0 0,0.7 6.3,7 0,13.299 0.7,14 7,7.7 13.3,14 14,13.299 7.7,7"></polygon></svg></yatag><yatag class="gtgrhizb"><yatag class="awtlxqt"></yatag><yatag class="mpcugbwt">Скрыть&nbsp;объявление</yatag></yatag></yatag></yatag></yatag></yatag></yatag></td></tr></tbody></table></yatag><yatag class="fvpqxqqg lnjaljftbe"><a class="hzuffsde" href="https://direct.yandex.ru/?partner" target="_blank">Яндекс.Директ</a></yatag></yatag></yatag></div>
+<script async="" src="./Правила использования сигналов в Unix_files/analytics.js.Без названия"></script><script src="./Правила использования сигналов в Unix_files/context.js.Без названия" type="text/javascript" async=""></script><script type="text/javascript">
+(function(w, d, n, s, t) {
+    w[n] = w[n] || [];
+    w[n].push(function() {
+        Ya.Direct.insertInto(147085, "yandex_ad", {
+            ad_format: "direct",
+            font_size: 0.9,
+            font_family: "verdana",
+            type: "horizontal",
+            border_type: "block",
+            limit: 2,
+            title_font_size: 1,
+            links_underline: true,
+            site_bg_color: "DDE1C2",
+            header_bg_color: "FEEAC7",
+            bg_color: "FFF9F0",
+            border_color: "B0B190",
+            title_color: "0000CC",
+            url_color: "006600",
+            text_color: "000000",
+            hover_color: "0066FF",
+            sitelinks_color: "0000CC",
+            favicon: true,
+            no_sitelinks: false
+        });
+    });
+    t = d.getElementsByTagName("script")[0];
+    s = d.createElement("script");
+    s.src = "//an.yandex.ru/system/context.js";
+    s.type = "text/javascript";
+    s.async = true;
+    t.parentNode.insertBefore(s, t);
+})(window, document, "yandex_context_callbacks");
+</script>
+</center>
+<br><br>
+
+<table border="0" cellspacing="0" cellpadding="1" bgcolor="#B0B190" width="100%">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="5" bgcolor="#E9EAD6" width="100%">
+<tbody><tr bgcolor="#C7CBB1"><td><table width="100%"><tbody><tr><td><font color="#000090"><b>Обсуждение</b></font></td>
+<td align="right" style="font-size: 0.5em;">[
+<a href="https://www.opennet.ru/cgi-bin/openforum/rss_forum.cgi?forum=vsluhforumID3&amp;om=71237" style="color: rgb(255, 102, 0);">RSS</a>
+]</td>
+</tr></tbody></table></td></tr>
+
+<tr bgcolor="E9EAD6"><td id="ln71237" class="ctxt">
+
+
+<table class="cblk"><tbody><tr><td width="3%">&nbsp;</td><td width="97%">
+
+<a name="1"></a><table class="cblk"><tbody><tr><td class="chdr"><li><a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#1">1</a>, <a href="https://www.opennet.ru/~gpr">gpr</a>, 21:50, 08/10/2010  [<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=post&amp;om=71237&amp;forum=vsluhforumID3&amp;omm=1" rel="nofollow">ответить</a>] [<a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#1">смотреть все</a>]&nbsp;&nbsp;&nbsp;&nbsp;[<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=to_moderator&amp;forum=vsluhforumID3&amp;om=71237&amp;omm=1" rel="nofollow">к&nbsp;модератору</a>] 
+</li></td><td class="chdr2"><span id="vt_2_3_71237_1" class="vt_d2"><a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_1&#39;,1);" title="Одобряю"><span class="vt_p">+</span></a>/<a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_1&#39;,-1);" title="Осуждаю"><span class="vt_m">&#8211;</span></a></span></td></tr><tr><td class="ctxt">
+Правило 1 пункт 2 не совсем верен.
+<p>Например в свежей freebsd (9-current) сигнал помещается в очередь, и при разблокировке сигнала обработчик будет вызван столько раз, сколько раз был послан сигнал.
+<br></p></td><td rowspan="2" valign="top" width="55" align="right"><a href="https://www.opennet.ru/~gpr"><img src="./Правила использования сигналов в Unix_files/6771dc6e739e688065ce315a65e9a2cf" width="40" height="40" border="0"></a></td></tr><tr><td>&nbsp;</td></tr></tbody></table>
+
+<div id="actshow_0_1">
+
+</div>
+
+<a name="2"></a><table class="cblk"><tbody><tr><td class="chdr"><li><a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#2">2</a>, <a href="https://www.opennet.ru/~icegood">icegood</a>, 16:27, 07/12/2010  [<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=post&amp;om=71237&amp;forum=vsluhforumID3&amp;omm=2" rel="nofollow">ответить</a>] [<a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#2">смотреть все</a>]&nbsp;&nbsp;&nbsp;&nbsp;[<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=to_moderator&amp;forum=vsluhforumID3&amp;om=71237&amp;omm=2" rel="nofollow">к&nbsp;модератору</a>] 
+</li></td><td class="chdr2"><span id="vt_2_3_71237_2" class="vt_d2"><a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_2&#39;,1);" title="Одобряю"><span class="vt_p">+</span></a>/<a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_2&#39;,-1);" title="Осуждаю"><span class="vt_m">&#8211;</span></a></span></td></tr><tr><td class="ctxt">
+13 пункт -жесть!
+<br></td><td rowspan="2" valign="top" width="55" align="right"><a href="https://www.opennet.ru/~icegood"><img src="./Правила использования сигналов в Unix_files/a64ec042436d7aee0418f929ef9244c5" width="40" height="40" border="0"></a></td></tr><tr><td>&nbsp;</td></tr></tbody></table>
+
+<div id="actshow_0_2">
+
+</div>
+
+<a name="3"></a><table class="cblk"><tbody><tr><td class="chdr"><li><a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#3">3</a>, <a href="https://www.opennet.ru/~DiriJor">DiriJor</a>, 16:56, 16/04/2011  [<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=post&amp;om=71237&amp;forum=vsluhforumID3&amp;omm=3" rel="nofollow">ответить</a>] [<a href="https://www.opennet.ru/openforum/vsluhforumID3/71237.html#3">смотреть все</a>]&nbsp;&nbsp;&nbsp;&nbsp;[<a href="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi?az=to_moderator&amp;forum=vsluhforumID3&amp;om=71237&amp;omm=3" rel="nofollow">к&nbsp;модератору</a>] 
+</li></td><td class="chdr2"><span id="vt_2_3_71237_3" class="vt_d2"><a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_3&#39;,1);" title="Одобряю"><span class="vt_p">+</span></a>/<a href="https://www.opennet.ru/base/dev/unix_signals.txt.html#" onclick="return o_vote(&#39;2_3_71237_3&#39;,-1);" title="Осуждаю"><span class="vt_m">&#8211;</span></a></span></td></tr><tr><td class="ctxt">
+идеальная статья большое спасибо долго искал что то подобное.
+<br></td><td rowspan="2" valign="top" width="55" align="right"><a href="https://www.opennet.ru/~DiriJor"><img src="./Правила использования сигналов в Unix_files/7280224e2a26a3f5bb7b76a7c538b440" width="40" height="40" border="0"></a></td></tr><tr><td>&nbsp;</td></tr></tbody></table>
+
+<div id="actshow_0_3">
+</div></td></tr></tbody></table>
+
+
+
+
+<br></td></tr>
+<tr bgcolor="#C7CBB1"><td><font color="#000090"><b>Ваш комментарий</b></font></td></tr>
+<tr bgcolor="#DDE1C2"><td>
+<form method="post" action="https://www.opennet.ru/cgi-bin/openforum/vsluhboard.cgi">
+<input type="hidden" name="om" value="71237">
+<input type="hidden" name="key_section" value="topic">
+<input type="hidden" name="key_sub" value="dev">
+<input type="hidden" name="key_item" value="unix_signals">
+<input type="hidden" name="forum" value="vsluhforumID3">
+<input type="hidden" name="omm" value="">
+<input type="hidden" name="az" value="a_mesg">
+
+Имя:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="name" size="30"><br>
+E-Mail:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="email" size="30"><br>
+Заголовок: <input type="text" name="subject" value="Правила использования сигналов в Unix (signal proccess faq select gcc)" size="30" maxlength="60"><br>
+Текст:<br>
+<textarea name="body" cols="40" rows="8" wrap="virtual"></textarea><br>
+<input type="submit" name="post" value="Отправить">
+</form>
+</td></tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+<br>
+<style>
+@media screen and (max-width: 900px) {
+    aside { display: none;}
+    .hdr_mobile { display: block;}
+}
+
+@media screen and (min-width: 900px) {
+    aside { display: block;}
+    .hdr_mobile { display: none;}
+}
+</style>
+</div>
+<div style="float: right; width: 300px; vertical-align: top;"><br>
+
+<script async="" src="./Правила использования сигналов в Unix_files/adsbygoogle.js.Без названия"></script>
+<ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-2075278885744463" data-ad-slot="3190089036" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:300px;height:600px;" src="./Правила использования сигналов в Unix_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+<div style="clear: both;"></div>
+
+
+
+
+<!--htdig_noindex-->
+<noindex>
+<br>
+
+<table id="ibm_adv" align="center"><tbody><tr valign="top"><td width="605">
+<iframe src="./Правила использования сигналов в Unix_files/adv_lc.html" height="240" width="605" scrolling="no" name="ibm" border="0" frameborder="0" target="_blank" marginheight="0" marginwidth="0"></iframe>
+</td></tr></tbody></table>
+</noindex>
+<!--/htdig_noindex-->
+
+
+<!-- footer -->
+<!--htdig_noindex-->
+<br>
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#B0B190">
+<tbody><tr><td>
+<table border="0" cellspacing="0" cellpadding="0" width="100%" valign="MIDDLE">
+<tbody><tr>
+<td width="35%" bgcolor="#E9EAD6" align="LEFT">
+<font size="-1">
+&nbsp;&nbsp;<a href="https://www.opennet.ru/cgi-bin/opennet/bookmark.cgi">Закладки&nbsp;на&nbsp;сайте</a><br>
+&nbsp;&nbsp;<a href="https://www.opennet.ru/cgi-bin/opennet/bookmark.cgi?submit=add" target="blank_">Проследить&nbsp;за&nbsp;страницей</a>
+</font>
+</td>
+<td width="65%" align="RIGHT" bgcolor="#E9EAD6">
+<font size="-1">Created&nbsp;1996-2017&nbsp;by&nbsp;<b><a href="https://www.opennet.ru/contact.shtml" title="email mc@tyumen.ru">Maxim&nbsp;Chirkov</a></b></font>&nbsp;&nbsp;<br>
+<font size="-1"><a href="https://www.opennet.ru/add.shtml">Добавить</a>,&nbsp;<a href="https://www.opennet.ru/reklama.shtml">Реклама</a>,&nbsp;<a href="https://www.opennet.ru/banners2.shtml">Вебмастеру</a>,&nbsp;<a href="https://www.opennet.ru/guide.shtml">ГИД</a></font>&nbsp;&nbsp;
+</td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+
+
+<div align="right"><table><tbody><tr><td>
+<a target="_blank" href="http://www.ihor.ru/"><img src="./Правила использования сигналов в Unix_files/ihor_but.png" border="0" height="31" width="88" alt="Hosting by Ihor"></a>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123449-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</td></tr></tbody></table>
+</div>
+
+<!--/htdig_noindex-->
+<!-- end of footer -->
+
+
+
+
+<div style="position: fixed; left: -99px;"><div id="sf-2894417809" style="width: 1px; height: 1px; position: relative;"><iframe frameborder="no" scrolling="no" allowtransparency="true" hidefocus="true" tabindex="-1" marginwidth="0" marginheight="0" name="%7B%22id%22%3A%22sf-2894417809%22%2C%22html%22%3A%22%3Cscript%3Evar%20config%3D%7B%5C%22tns%5C%22%3A%7B%5C%22key%5C%22%3A%5C%22pcs_for_net-rtb-direct%5C%22%2C%5C%22url%5C%22%3A%5C%22https%3A%2F%2Fan.yandex.ru%2Fmapuid%2Ftnscounter%2F%3Ffrom%3Dyan_net-rtb-direct%5C%22%7D%2C%5C%22rtb%5C%22%3A%7B%5C%22matchUrls%5C%22%3A%5B%5C%22https%3A%2F%2Fan.yandex.ru%2Fmapuid%2Fbidswitch%2F%5C%22%2C%5C%22https%3A%2F%2Fan.yandex.ru%2Fmapuid%2Frubicon%2F%5C%22%2C%5C%22https%3A%2F%2Fan.yandex.ru%2Fmapuid%2Fgoogle%2F%5C%22%2C%5C%22https%3A%2F%2Fdmg.digitaltarget.ru%2F1%2F119%2Fi%2Fi%3Fi%3D1523517296%5C%22%2C%5C%22https%3A%2F%2Fyandex-dmp-sync.rutarget.ru%2Fsync%5C%22%2C%5C%22https%3A%2F%2Fyandex-sync.rutarget.ru%2Fsync%5C%22%2C%5C%22https%3A%2F%2Fx01.aidata.io%2F0.gif%3Fpid%3DYANDEX%5C%22%2C%5C%22https%3A%2F%2Fsync.1dmp.io%2Fpixel.gif%3Fcid%3D3cbc2ec8-1421-4677-89fe-2ac6fc52a09a%26pid%3Dw%26o%3Dau%5C%22%2C%5C%22https%3A%2F%2Fredirect.frontend.weborama.fr%2Fredirect%2Fstandard%3Furl%3Dhttps%3A%2F%2Fan.yandex.ru%2Fmapuid%2Fdmpweborama%2F%7BWEBO_CID%7D%5C%22%2C%5C%22https%3A%2F%2Ffront.facetz.net%2Fcollect%3Fsync_redirect%3Dyandexdmp%5C%22%5D%7D%7D%3C%2Fscript%3E%3Cscript%3E%5C%22use%20strict%5C%22%3Bfunction%20t(t%2Cn%2Ce)%7Bvar%20c%3Dt%2B%5C%22%3D1%5C%22%3Bif(-1%3D%3D%3Ddocument.cookie.indexOf(c))%7Bvar%20s%3D86400*n*1e3%2Cr%3Dnew%20Date%2Ci%3Dnew%20Date(Number(r)%2Bs).toUTCString()%3Bdocument.cookie%3Dc%2B%5C%22%3B%20expires%3D%5C%22%2Bi%2Ce()%7D%7Dfunction%20n(t)%7B(new%20Image).src%3Dt%7Dfunction%20e(t)%7Bvar%20n%3Ddocument.createElement(%5C%22script%5C%22)%3Bn.src%3Dt%2Cdocument.body.appendChild(n)%7Dif(config.tns)%7Bvar%20c%3Dconfig.tns%2Cs%3Dc.key%2Cr%3Dc.url%3Bt(s%2C1%2Cfunction()%7Bn(r)%7D)%7Dif(config.rtb)%7Bvar%20i%3Dconfig.rtb.matchUrls%3Bt(%5C%22pcs3%5C%22%2C1%2Cfunction()%7Be(%5C%22https%3A%2F%2Fyastatic.net%2Fq%2Fset%2Fs%2Frsya-tag-users%2Fbundle.js%5C%22)%7D)%2Cfunction(t)%7Breturn%20Math.random()%3Ct%7D(.2)%26%26t(%5C%22pcssspb%5C%22%2C14%2Cfunction()%7Bfor(var%20t%3D0%3Bt%3Ci.length%3Bt%2B%2B)n(i%5Bt%5D)%7D)%2Cn(%5C%22https%3A%2F%2Fysa-static.passport.yandex.ru%2Fstatic%2F1%2Fd959d7e39d5067fad30d9c06204866e9%2Fd.png%3Fex%3Dyes%5C%22)%7D%3C%2Fscript%3E%22%2C%22pmGuid%22%3A%22_1523516814059_97_2%22%2C%22geom%22%3A%7B%22win%22%3A%7B%22t%22%3A0%2C%22l%22%3A0%2C%22w%22%3A1680%2C%22h%22%3A944%2C%22b%22%3A944%2C%22r%22%3A1680%7D%2C%22self%22%3A%7B%22t%22%3A8825%2C%22l%22%3A-99%2C%22b%22%3A8826%2C%22r%22%3A-98%2C%22w%22%3A1%2C%22h%22%3A1%2C%22xiv%22%3A0%2C%22yiv%22%3A0%2C%22iv%22%3A0%2C%22z%22%3A0%7D%2C%22exp%22%3A%7B%22t%22%3A8825%2C%22l%22%3A0%2C%22r%22%3A1778%2C%22b%22%3A0%2C%22xs%22%3A0%2C%22ys%22%3A0%7D%7D%2C%22hasFocus%22%3Atrue%2C%22supports%22%3A%7B%22exp-ovr%22%3Atrue%2C%22exp-push%22%3Afalse%2C%22read-cookie%22%3Afalse%2C%22write-cookie%22%3Afalse%7D%2C%22css%22%3A%22%22%2C%22bg%22%3A%22transparent%22%2C%22posMeta%22%3A%7B%22sharedData%22%3A%7B%22sf_ver%22%3A%221-1-0%22%2C%22ck_o%22%3A1%2C%22flash_ver%22%3A0%7D%2C%22ownerKey%22%3A%22%22%2C%22privateData%22%3A%7B%7D%7D%2C%22target%22%3A%22_blank%22%2C%22basePath%22%3A%22%22%7D" src="./Правила использования сигналов в Unix_files/render.html" width="1" height="1" style="width: 1px; height: 1px; top: 0px; left: 0px; position: absolute;"></iframe></div></div></body></html>
