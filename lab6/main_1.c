@@ -5,12 +5,13 @@
 
 char* RandomValue()
 {
-    char* value = (char*)malloc(10);
+    char* value = (char*)malloc(11);
     int i;
     
     for(i = 0; i < 10; i++)
-        value[i] = rand() % 10;
+        value[i] = rand() % 255;
     
+    value[10] = '\0';
     return value;
 }
 
@@ -43,10 +44,16 @@ void SignalInt(int s)
         execv(argv[0], argv);
 }
 
+vois SignalQuit()
+{
+    exit(0);
+}
+
 int main()
 {
     printf("My pid = %d\n", getpid();
     signal(SIGINT, SignalInt);
-    signal(SIGQUIT, SIG_DFL);
+    signal(SIGQUIT, SignalQuit);
+    while(1);
     return 0;
 }
