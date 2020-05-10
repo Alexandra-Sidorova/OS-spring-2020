@@ -13,7 +13,7 @@ int ReadCount;
 void* Writer(void* arg)
 {
     int i;
-    int id = (int)(intptr_t)arg;
+    int id = *(int*)arg;
     
     for(i = 0; i < 5; i++)
     {
@@ -38,7 +38,7 @@ void* Writer(void* arg)
 void* Reader(void* arg)
 {
     int i;
-    int id = (int)(intptr_t)arg;
+    int id = *(int*)arg;
    
     
     for(i = 0; i < 5; i++)
@@ -85,7 +85,7 @@ void* Reader(void* arg)
 int main()
 {
     pthread_t threads[10];
-    int i;
+    int i, j;
     
     if(sem_init(&semaphore, 0, 1) != 0)
     {
@@ -95,12 +95,13 @@ int main()
     
     for(i = 0; i < 5; i++)
     {
-        if (pthread_create(&threads[i], NULL, Writer, (void*)(nullptr_t)i) != 0)
+        j = i + 5;
+        if (pthread_create(&threads[i], NULL, Writer, (void*)&i) != 0)
         {
             printf("Error pthread_create %d\n", i);
             return -1;
         }
-        if (pthread_create(&threads[5 + i], NULL, Reader, (void*)(nullptr_t)i) != 0)
+        if (pthread_create(&threads[j], NULL, Reader, (void*)&j) != 0)
         {
             printf("Error pthread_create %d\n", 5 + i);
             return -1;
