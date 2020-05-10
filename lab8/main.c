@@ -4,7 +4,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-sem_t semaphore;
+sem_t RC;
+sem_t Access
 
 int Data;
 int ReadCount;
@@ -12,21 +13,21 @@ int ReadCount;
 void* Writer(void* arg)
 {
     int i;
-    int id = *(void*)arg;
+    int id = (int)(intptr_t)arg;
     
     for(i = 0; i < 5; i++)
     {
         sleep(rand() % 11 + 10);
-        if (sem_wait($semaphore) != 0)
+        if (sem_wait(&Access) != 0)
         {
-            printf("Error writer sem_wait!\n");
+            printf("Error writer sem_wait Access!\n");
             break;
         } 
         printf("Writer #%d starts writing. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
         sleep(3);
         Data++;
         printf("Writer #%d ends writing. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
-        if (sem_post($semaphore) != 0)
+        if (sem_post(&Access) != 0)
         {
             printf("Error writer sem_post!\n");
             break;
@@ -37,22 +38,43 @@ void* Writer(void* arg)
 void* Reader(void* arg)
 {
     int i;
-    int id = *(void*)arg;
+    int id = (int)(intptr_t)arg;
+   
     
     for(i = 0; i < 5; i++)
     {
+        if (sem_wait(&RC) != 0)
+        {
+            printf("Error reader sem_wait RC!\n");
+            break;
+        } 
         sleep(rand() % 11 + 10);
-        if (sem_wait($semaphore) != 0)
+        ReadCount++;
+        if (sem_wait(&Access) != 0)
+        {
+            printf("Error reader sem_wait Access!\n");
+            break;
+        } 
+        if (sem_post(&RC) != 0)
+        {
+            printf("Error reader sem_post RC!\n");
+            break;
+        } 
+        printf("Reader #%d starts reading. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
+        sleep(3);
+        printf("Reader #%d ends reading. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
+        if (sem_wait(&RC) != 0)
+        {
+            printf("Error reader sem_wait RC!\n");
+            break;
+        }
+        ReadCount--;
+        if (sem_post(&Access) != 0)
         {
             printf("Error reader sem_wait!\n");
             break;
         } 
-        ReadCount++;
-        printf("Reader #%d starts reading. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
-        sleep(3);
-        printf("Reader #%d ends reading. ReadCount = %d, Data = %d\n", id, ReadCount, Data);
-        ReadCount--;
-        if (sem_post($semaphore) != 0)
+        if (sem_post(&RC) != 0)
         {
             printf("Error reader sem_post!\n");
             break;
@@ -73,12 +95,12 @@ int main()
     
     for(i = 0; i < 5; i++)
     {
-        if (pthread_create(&threads[i], NULL, Writer, (void*)&i) != 0)
+        if (pthread_create(&threads[i], NULL, Writer, (void*)(nullptr_t)i) != 0)
         {
             printf("Error pthread_create %d\n", i);
             return -1;
         }
-        if (pthread_create(&threads[5 + i], NULL, Reader, (void*)&i) != 0)
+        if (pthread_create(&threads[5 + i], NULL, Reader, (void*)(nullptr_t)i) != 0)
         {
             printf("Error pthread_create %d\n", 5 + i);
             return -1;
