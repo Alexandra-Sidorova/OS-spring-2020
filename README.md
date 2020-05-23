@@ -3,6 +3,7 @@
 This repository stores laboratory works of Operating Systems cource of spring 2020 during distance learning.
 
 *Language*: C
+
 *OS*: Linux (except laboratory work 3 - Windows)
 
 There are folders for every laboratory works. Each folder has folder *docs* that stores *html* files with reference information and task text file and *main.c* - file with code on C.
